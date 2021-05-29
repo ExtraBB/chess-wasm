@@ -2,7 +2,7 @@
 @inject IJSRuntime JsRuntime;
 @using ChessWasm.Models;
 @using ChessWasm.Services;
-@using ChessWasm.Components;
+@using ChessWasm.Shared;
 
 <h1>Hello, world!</h1>
 
@@ -11,11 +11,11 @@
     <button @onclick="RandomMove">Random Move</button>
 </div>
 
-<ChessBoard @ref="chessBoard" @bind-Squares="squares" />
+<ChessBoard @ref="chessBoard" @bind-Squares="squares" /> 
 
 @code {
     private GameService gameService = new GameService();
-    private sbyte[] squares = null;
+    private Piece[] squares = null;
     ChessBoard chessBoard;
 
     Random rand = new Random();
@@ -29,8 +29,13 @@
 
     private void RandomMove()
     {
-        int from = rand.Next(0, 64);
-        int to = rand.Next(0, 64);
+        int from = 0, to = 0;
+        while(from == to || squares[from] == Piece.None)
+        {
+            from = rand.Next(0, 64);
+            to = rand.Next(0, 64);
+        }
+        Console.WriteLine($"Moving {from} to {to}");
         gameService.CurrentGame.MakeMove(from, to);
     }
 

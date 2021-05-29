@@ -19,7 +19,7 @@ namespace ChessWasm.Models
             8,  9, 10, 11, 12, 13, 14, 15
             0,  1,  2,  3,  4,  5,  6,  7
         */
-        public sbyte[] Squares { get; private set; }
+        public Piece[] Squares { get; private set; }
 
         public delegate void BoardChangedEventHandler(object sender, BoardChangedEventArgs e);
         public event BoardChangedEventHandler BoardChanged;
@@ -31,47 +31,24 @@ namespace ChessWasm.Models
 
         public void Reset() 
         {
-            Squares = new sbyte[64];
-
-            // Pawns
-            for(int i = 8; i < 16; i++)
+            Squares = new Piece[]
             {
-                Squares[i] = Constants.PIECE_PAWN;
-                Squares[i + 40] = -Constants.PIECE_PAWN;
-            }
-
-            // Rooks
-            Squares[0] = Constants.PIECE_ROOK;
-            Squares[7] = Constants.PIECE_ROOK;
-            Squares[56] = -Constants.PIECE_ROOK;
-            Squares[63] = -Constants.PIECE_ROOK;
-
-            // Knights
-            Squares[1] = Constants.PIECE_KNIGHT;
-            Squares[6] = Constants.PIECE_KNIGHT;
-            Squares[57] = -Constants.PIECE_KNIGHT;
-            Squares[62] = -Constants.PIECE_KNIGHT;
-
-            // Bishops
-            Squares[2] = Constants.PIECE_BISHOP;
-            Squares[5] = Constants.PIECE_BISHOP;
-            Squares[58] = -Constants.PIECE_BISHOP;
-            Squares[61] = -Constants.PIECE_BISHOP;
-
-            // Queens
-            Squares[3] = Constants.PIECE_QUEEN;
-            Squares[59] = -Constants.PIECE_QUEEN;
-
-            // Kings
-            Squares[4] = Constants.PIECE_KING;
-            Squares[60] = -Constants.PIECE_KING;
+                Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King, Piece.Bishop, Piece.Knight, Piece.Rook,
+                Piece.Pawn, Piece.Pawn, Piece.Pawn, Piece.Pawn, Piece.Pawn, Piece.Pawn, Piece.Pawn, Piece.Pawn, 
+                Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, 
+                Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, 
+                Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, 
+                Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, 
+                Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, 
+                Piece.Rook | Piece.White, Piece.Knight | Piece.White, Piece.Bishop | Piece.White, Piece.Queen | Piece.White, Piece.King | Piece.White, Piece.Bishop | Piece.White, Piece.Knight | Piece.White, Piece.Rook | Piece.White
+            };
         }
 
         public void MakeMove(int from, int to)
         {
             Squares[to] = Squares[from];
-            Squares[from] = 0;
-            BoardChanged?.Invoke(this, new BoardChangedEventArgs() { LastPlayer = Math.Sign(Squares[to]) });
+            Squares[from] = Piece.None;
+            BoardChanged?.Invoke(this, new BoardChangedEventArgs() { LastPlayer = Squares[to].HasFlag(Piece.White) ? 1 : -1 });
         }
     }
 }

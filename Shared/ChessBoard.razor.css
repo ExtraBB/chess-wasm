@@ -22,3 +22,7 @@
 .square-dark {
     background-color: #779556;
 }
+
+.square img {
+    margin: 2px 0 0 2px;
+}

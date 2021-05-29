@@ -1,21 +1,27 @@
-@namespace ChessWasm.Components
+@namespace ChessWasm.Shared
+@using ChessWasm.Models
 
 <div class="board">
-    @for(int i = 7; i >= 0; i--)
+    @for(int i = 0; i < 8; i++)
     {
         <div class="board-row">
             @for(int j = 0; j < 8; j++)
             {
-                <div class="square @(GetClassForSquare(i, j))">@(squares != null ? squares[i * 8 + j] : "")</div>
+                <div class="square @(GetClassForSquare(i, j))">
+                    @if(squares != null && !squares[i * 8 + j].HasFlag(Piece.None))
+                    {
+                        <img src="/assets/@(GetImageForPiece(i, j)).png" />
+                    }
+                </div>
             }
         </div>
     }
 </div>
 @code {
-    private sbyte[] squares;
+    private Piece[] squares;
 
     [Parameter]
-    public sbyte[] Squares 
+    public Piece[] Squares 
     { 
         get => squares; 
         set 
@@ -27,7 +33,7 @@
     }
 
     [Parameter]
-    public EventCallback<sbyte[]> SquaresChanged { get; set; }
+    public EventCallback<Piece[]> SquaresChanged { get; set; }
 
     private string GetClassForSquare(int i, int j) 
     {
@@ -35,5 +41,14 @@
             i % 2 == 0 
                 ? (j % 2 == 0 ? "square-dark" : "square-light")
                 : (j % 2 == 0 ? "square-light" : "square-dark");
+    }
+
+    private string GetImageForPiece(int i, int j) 
+    {
+        Piece piece = squares[i * 8 + j];
+
+        @* Console.WriteLine($"{i * 8 + j}, {(int)piece}, {piece.ToString()}"); *@
+        string color = piece.HasFlag(Piece.White) ? "white" : "black";
+        return $"{(piece & ~Piece.White).ToString()}_{color}";
     }
 }
