@@ -2,15 +2,16 @@
 @using ChessWasm.Models
 
 <div class="board">
-    @for(int i = 0; i < 8; i++)
+    @for(int x = 0; x < 8; x++)
     {
         <div class="board-row">
-            @for(int j = 0; j < 8; j++)
+            @for(int y = 0; y < 8; y++)
             {
-                <div class="square @(GetClassForSquare(i, j))">
-                    @if(squares != null && squares[i * 8 + j] != 0)
+                int row = x, col = y;
+                <div class="square @(GetClassForSquare(x, y))" @onclick="(() => SquareClicked(row, col))">
+                    @if(squares != null && squares[x * 8 + y] != 0)
                     {
-                        <img src="/assets/@(GetImageForPiece(squares[i * 8 + j])).png" />
+                        <img src="/assets/@(GetImageForPiece(squares[x * 8 + y])).png" />
                     }
                 </div>
             }
@@ -19,6 +20,7 @@
 </div>
 @code {
     private Piece[] squares;
+    private (int x, int y) HighlightedPiece = (-1,-1);
 
     [Parameter]
     public Piece[] Squares 
@@ -35,17 +37,31 @@
     [Parameter]
     public EventCallback<Piece[]> SquaresChanged { get; set; }
 
-    private string GetClassForSquare(int i, int j) 
+    private string GetClassForSquare(int x, int y) 
     {
-        return 
-            i % 2 == 0 
-                ? (j % 2 == 0 ? "square-dark" : "square-light")
-                : (j % 2 == 0 ? "square-light" : "square-dark");
+        string colorClass =  
+            x % 2 == 0 
+                ? (y % 2 == 0 ? "square-dark" : "square-light")
+                : (y % 2 == 0 ? "square-light" : "square-dark");
+
+        return colorClass + (HighlightedPiece.x == x && HighlightedPiece.y == y ? "-highlight" : "");
     }
 
     private string GetImageForPiece(Piece piece) 
     {
         string color = piece.HasFlag(Piece.White) ? "white" : "black";
         return $"{(piece & ~Piece.White & ~Piece.Black).ToString()}_{color}";
+    }
+
+    private void SquareClicked(int x, int y) 
+    {
+        if(HighlightedPiece.x == x && HighlightedPiece.y == y) 
+        {
+            HighlightedPiece = (-1, -1);
+        }
+        else
+        {
+            HighlightedPiece = (x,y);
+        }
     }
 }

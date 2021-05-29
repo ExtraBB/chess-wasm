@@ -19,8 +19,16 @@
     background-color: #ebecd0;
 }
 
+.square-light-highlight {
+    background-color: #f6f668;
+}
+
 .square-dark {
     background-color: #779556;
+}
+
+.square-dark-highlight {
+    background-color: #bbca2b;
 }
 
 .square img {
