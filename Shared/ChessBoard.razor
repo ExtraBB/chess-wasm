@@ -8,9 +8,9 @@
             @for(int j = 0; j < 8; j++)
             {
                 <div class="square @(GetClassForSquare(i, j))">
-                    @if(squares != null && !squares[i * 8 + j].HasFlag(Piece.None))
+                    @if(squares != null && squares[i * 8 + j] != 0)
                     {
-                        <img src="/assets/@(GetImageForPiece(i, j)).png" />
+                        <img src="/assets/@(GetImageForPiece(squares[i * 8 + j])).png" />
                     }
                 </div>
             }
@@ -43,12 +43,9 @@
                 : (j % 2 == 0 ? "square-light" : "square-dark");
     }
 
-    private string GetImageForPiece(int i, int j) 
+    private string GetImageForPiece(Piece piece) 
     {
-        Piece piece = squares[i * 8 + j];
-
-        @* Console.WriteLine($"{i * 8 + j}, {(int)piece}, {piece.ToString()}"); *@
         string color = piece.HasFlag(Piece.White) ? "white" : "black";
-        return $"{(piece & ~Piece.White).ToString()}_{color}";
+        return $"{(piece & ~Piece.White & ~Piece.Black).ToString()}_{color}";
     }
 }

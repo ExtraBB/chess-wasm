@@ -33,12 +33,12 @@ namespace ChessWasm.Models
         {
             Squares = new Piece[]
             {
-                Piece.Rook, Piece.Knight, Piece.Bishop, Piece.Queen, Piece.King, Piece.Bishop, Piece.Knight, Piece.Rook,
-                Piece.Pawn, Piece.Pawn, Piece.Pawn, Piece.Pawn, Piece.Pawn, Piece.Pawn, Piece.Pawn, Piece.Pawn, 
-                Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, 
-                Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, 
-                Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, 
-                Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, Piece.None, 
+                Piece.Rook | Piece.Black, Piece.Knight | Piece.Black, Piece.Bishop | Piece.Black, Piece.Queen | Piece.Black, Piece.King | Piece.Black, Piece.Bishop | Piece.Black, Piece.Knight | Piece.Black, Piece.Rook | Piece.Black,
+                Piece.Pawn | Piece.Black, Piece.Pawn | Piece.Black, Piece.Pawn | Piece.Black, Piece.Pawn | Piece.Black, Piece.Pawn | Piece.Black, Piece.Pawn | Piece.Black, Piece.Pawn | Piece.Black, Piece.Pawn | Piece.Black, 
+                0, 0, 0, 0, 0, 0, 0, 0, 
+                0, 0, 0, 0, 0, 0, 0, 0, 
+                0, 0, 0, 0, 0, 0, 0, 0, 
+                0, 0, 0, 0, 0, 0, 0, 0, 
                 Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, Piece.Pawn | Piece.White, 
                 Piece.Rook | Piece.White, Piece.Knight | Piece.White, Piece.Bishop | Piece.White, Piece.Queen | Piece.White, Piece.King | Piece.White, Piece.Bishop | Piece.White, Piece.Knight | Piece.White, Piece.Rook | Piece.White
             };
@@ -47,7 +47,7 @@ namespace ChessWasm.Models
         public void MakeMove(int from, int to)
         {
             Squares[to] = Squares[from];
-            Squares[from] = Piece.None;
+            Squares[from] = 0;
             BoardChanged?.Invoke(this, new BoardChangedEventArgs() { LastPlayer = Squares[to].HasFlag(Piece.White) ? 1 : -1 });
         }
     }
