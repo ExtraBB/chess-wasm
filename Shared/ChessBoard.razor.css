@@ -1,0 +1,24 @@
+.board {
+    border-radius: 5px 5px;
+    width: 512px;
+    height: 512px;
+    margin: 32px 0px;
+}
+
+.board-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.square {
+    width: 64px;
+    height: 64px;
+}
+
+.square-light {
+    background-color: #ebecd0;
+}
+
+.square-dark {
+    background-color: #779556;
+}

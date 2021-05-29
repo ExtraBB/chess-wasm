@@ -1,0 +1,39 @@
+@namespace ChessWasm.Components
+
+<div class="board">
+    @for(int i = 7; i >= 0; i--)
+    {
+        <div class="board-row">
+            @for(int j = 0; j < 8; j++)
+            {
+                <div class="square @(GetClassForSquare(i, j))">@(squares != null ? squares[i * 8 + j] : "")</div>
+            }
+        </div>
+    }
+</div>
+@code {
+    private sbyte[] squares;
+
+    [Parameter]
+    public sbyte[] Squares 
+    { 
+        get => squares; 
+        set 
+        {
+            if(squares == value) return;
+            squares = value;
+            SquaresChanged.InvokeAsync(value);
+        }
+    }
+
+    [Parameter]
+    public EventCallback<sbyte[]> SquaresChanged { get; set; }
+
+    private string GetClassForSquare(int i, int j) 
+    {
+        return 
+            i % 2 == 0 
+                ? (j % 2 == 0 ? "square-dark" : "square-light")
+                : (j % 2 == 0 ? "square-light" : "square-dark");
+    }
+}
