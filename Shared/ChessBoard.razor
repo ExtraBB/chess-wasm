@@ -1,5 +1,6 @@
 @namespace ChessWasm.Shared
 @using ChessWasm.Models
+@using ChessWasm.Services
 
 <div class="board">
     @for(int x = 0; x < 8; x++)
@@ -22,20 +23,16 @@
     private Piece[] squares;
     private (int x, int y) HighlightedPiece = (-1,-1);
 
-    [Parameter]
-    public Piece[] Squares 
-    { 
-        get => squares; 
-        set 
-        {
-            if(squares == value) return;
-            squares = value;
-            SquaresChanged.InvokeAsync(value);
-        }
+    public ChessBoard() 
+    {
+        GameService.BoardChanged += UpdateBoard;
     }
 
-    [Parameter]
-    public EventCallback<Piece[]> SquaresChanged { get; set; }
+    private void UpdateBoard(Board board)
+    {
+        squares = board.Squares;
+        this.StateHasChanged();
+    }
 
     private string GetClassForSquare(int x, int y) 
     {

@@ -11,24 +11,14 @@
     <button @onclick="() => GameService.RandomMove()">Random Move</button>
 </div>
 
-<ChessBoard @ref="chessBoard" @bind-Squares="squares" /> 
+<ChessBoard /> 
 
 @code {
-    private Piece[] squares = null;
-    ChessBoard chessBoard;
-
     Random rand = new Random();
 
     private void StartGame()
     {
         GameService.StartGame();
-        GameService.CurrentGame.Board.BoardChanged += BoardChanged;
-        squares = GameService.CurrentGame.Board.Squares;
     }
 
-
-    private void BoardChanged(object sender, BoardChangedEventArgs args) 
-    {
-        chessBoard.SquaresChanged.InvokeAsync((sender as Board).Squares);
-    }
 }

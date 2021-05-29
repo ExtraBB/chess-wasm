@@ -8,9 +8,13 @@ namespace ChessWasm.Services
         private static Random rand = new Random();
         public static Game CurrentGame { get; private set; }
 
+        public delegate void BoardChangedEventHandler(Board board);
+        public static event BoardChangedEventHandler BoardChanged;
+
         public static Game StartGame() 
         {
             CurrentGame = new Game();
+            BoardChanged?.Invoke(CurrentGame.Board);
             return CurrentGame;
         }
 
@@ -23,6 +27,8 @@ namespace ChessWasm.Services
                 to = rand.Next(0, 64);
             }
             CurrentGame.MakeMove(from, to);
+
+            BoardChanged?.Invoke(CurrentGame.Board);
         }
     }
 }

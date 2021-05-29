@@ -21,9 +21,6 @@ namespace ChessWasm.Models
         */
         public Piece[] Squares { get; private set; }
 
-        public delegate void BoardChangedEventHandler(object sender, BoardChangedEventArgs e);
-        public event BoardChangedEventHandler BoardChanged;
-
         public Board() 
         {
             Reset();
@@ -48,7 +45,6 @@ namespace ChessWasm.Models
         {
             Squares[to] = Squares[from];
             Squares[from] = 0;
-            BoardChanged?.Invoke(this, new BoardChangedEventArgs() { LastPlayer = Squares[to].HasFlag(Piece.White) ? 1 : -1 });
         }
     }
 }
