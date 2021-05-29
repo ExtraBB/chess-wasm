@@ -31,6 +31,7 @@
     private void UpdateBoard(Board board)
     {
         squares = board.Squares;
+        HighlightedPiece = (-1, -1);
         this.StateHasChanged();
     }
 
@@ -50,15 +51,27 @@
         return $"{(piece & ~Piece.White & ~Piece.Black).ToString()}_{color}";
     }
 
-    private void SquareClicked(int x, int y) 
+    private void SquareClicked(int newX, int newY) 
     {
-        if(HighlightedPiece.x == x && HighlightedPiece.y == y) 
+        int oldX = HighlightedPiece.x;
+        int oldY = HighlightedPiece.y;
+
+        if (oldX == -1 || oldY == -1)
+        {
+            HighlightedPiece = (newX, newY);
+        }
+        else if (oldX == newX && oldY == newY) 
         {
             HighlightedPiece = (-1, -1);
         }
+        else if (squares[oldX * 8 + oldY] != 0)
+        {
+            GameService.TryMakeMove(oldX, oldY, newX, newY);
+            HighlightedPiece = (-1, -1);
+        } 
         else
         {
-            HighlightedPiece = (x,y);
+            HighlightedPiece = (newX, newY);
         }
     }
 }

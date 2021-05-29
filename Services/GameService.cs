@@ -30,5 +30,11 @@ namespace ChessWasm.Services
 
             BoardChanged?.Invoke(CurrentGame.Board);
         }
+
+         public static void TryMakeMove(int fromX, int fromY, int toX, int toY)
+        {
+            CurrentGame.MakeMove(fromX * 8 + fromY, toX * 8 + toY);
+            BoardChanged?.Invoke(CurrentGame.Board);
+        }
     }
 }
