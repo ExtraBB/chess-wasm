@@ -13,6 +13,7 @@
 .square {
     width: 64px;
     height: 64px;
+    position: relative;
 }
 
 .square-light {
@@ -33,4 +34,14 @@
 
 .square img {
     margin: 2px 0 0 2px;
+}
+
+.possible-move {
+    background-color: rgba(0,0,0,.4);
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    border-radius: 50%;
 }
