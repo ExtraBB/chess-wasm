@@ -43,11 +43,12 @@ namespace ChessWasm.Models
             };
         }
 
-        public void MakeMove(Move move)
+        public Piece MakeMove(Move move)
         {
             Squares[move.To] = Squares[move.From];
             Squares[move.From] = 0;
             LastMove = move;
+            return move.Player == Piece.White ? Piece.Black : Piece.White;
         }
     }
 }

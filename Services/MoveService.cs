@@ -7,26 +7,13 @@ namespace ChessWasm.Services
 {
     public static class MoveService
     {
-        private static Random rand = new Random();
-        
-        public static Move GetRandomMove(Board board)
-        {
-            int from = 0, to = 0;
-            while(from == to || board.Squares[from] == 0)
-            {
-                from = rand.Next(0, 64);
-                to = rand.Next(0, 64);
-            }
-            return new Move(){ From = from, To = to};
-        }
-
-        public static Dictionary<int, IEnumerable<Move>> GetAllPossibleMoves(Board board)
+        public static Dictionary<int, IEnumerable<Move>> GetAllPossibleMoves(Board board, Piece player)
         {
             Dictionary<int, IEnumerable<Move>> result = new Dictionary<int, IEnumerable<Move>>();
 
             for(int i = 0; i < 64; i++) 
             {
-                IEnumerable<Move> moves = CalculateMovesForPiece(i, board);
+                IEnumerable<Move> moves = CalculateMovesForPiece(i, board, player);
                 if(moves != null) 
                 {
                     result.Add(i, moves);
@@ -36,10 +23,10 @@ namespace ChessWasm.Services
             return result;
         }
 
-        private static IEnumerable<Move> CalculateMovesForPiece(int position, Board board)
+        private static IEnumerable<Move> CalculateMovesForPiece(int position, Board board, Piece player)
         {
             Piece piece = board.Squares[position];
-            if(piece == 0) 
+            if(piece == 0 || !piece.HasFlag(player)) 
             {
                 return null;
             }

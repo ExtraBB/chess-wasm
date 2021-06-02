@@ -2,6 +2,10 @@
 @using ChessWasm.Models
 @using ChessWasm.Services
 
+@if(winnerText != null)
+{
+    <div class="winner-text">@(winnerText)</div>
+}
 <div class="board">
     @for(int row = 0; row < 8; row++)
     {
@@ -26,6 +30,7 @@
 @code {
     private Piece[] squares;
     private int highlightedPosition = -1;
+    private string winnerText = null;
 
     public ChessBoard() 
     {
@@ -73,6 +78,14 @@
             if(move != null) 
             {
                 GameService.TryMakeMove(move);
+                if(GameService.CurrentGame.Winner != 0)
+                {
+                    string winner = GameService.CurrentGame.Winner == Piece.White ? "White" : "Black";
+                    winnerText = $"{winner} has won!";
+                    GameService.ClearGame();
+                    squares = null;
+                    this.StateHasChanged();
+                }
                 highlightedPosition = -1;
                 return;
             }

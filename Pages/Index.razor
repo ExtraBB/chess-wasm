@@ -8,14 +8,11 @@
 
 <div>
     <button @onclick="StartGame">New Game</button>
-    <button @onclick="() => GameService.RandomMove()">Random Move</button>
 </div>
 
 <ChessBoard /> 
 
 @code {
-    Random rand = new Random();
-
     private void StartGame()
     {
         GameService.StartGame();
