@@ -15,4 +15,27 @@ namespace ChessWasm.Models
         King = 0b_1000_0000,
 
     }
+
+    public static class PieceExtensions
+    {
+        public static bool CapturesDiagonal(this Piece piece) 
+        {
+            return piece.HasFlag(Piece.Pawn) || piece.HasFlag(Piece.Bishop) || piece.HasFlag(Piece.Queen) || piece.HasFlag(Piece.King) || piece.HasFlag(Piece.Pawn);
+        }
+
+        public static bool CapturesStraight(this Piece piece) 
+        {
+            return piece.HasFlag(Piece.Queen) || piece.HasFlag(Piece.King) || piece.HasFlag(Piece.Rook);
+        }
+
+        public static bool CanMoveUnlimitedSquares(this Piece piece) 
+        {
+            return piece.HasFlag(Piece.Queen) || piece.HasFlag(Piece.Bishop) || piece.HasFlag(Piece.Rook);
+        }
+
+        public static bool CanMoveOneSquare(this Piece piece) 
+        {
+            return piece.HasFlag(Piece.Pawn) || piece.HasFlag(Piece.King);
+        }
+    }
 }
