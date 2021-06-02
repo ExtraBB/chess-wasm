@@ -6,5 +6,15 @@ namespace ChessWasm.Services
         {
             return row * 8 + file;
         }
+
+        public static int PositionToRow(int position) 
+        {
+            return position / 8;
+        }
+
+       public static int PositionToFile(int position) 
+        {
+            return position % 8;
+        }
     }
 }

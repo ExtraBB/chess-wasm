@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ChessWasm.Services;
 
 namespace ChessWasm.Models
 {
@@ -12,17 +13,12 @@ namespace ChessWasm.Models
             Board = new Board();
         }
 
-        public void MakeMove(int from, int to) 
+        public void MakeMove(Move move) 
         {
-            if(IsLegal(from, to)) 
+            if(MoveService.IsLegalMove(Board, move)) 
             {
-                Board.MakeMove(from, to);
+                Board.MakeMove(move);
             }
-        }
-
-        private bool IsLegal(int from, int to) 
-        {
-            return true;
         }
     }
 }

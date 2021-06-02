@@ -71,14 +71,14 @@ namespace ChessWasm.Services
                 moves = CalculatePawnMoves(position, board, piece.HasFlag(Piece.White));
             }
 
-            return moves.Where(m => !KingIsInCheckAfterMove(board, m));
+            return moves.Where(m => IsLegalMove(board, m));
         }
 
         private static IEnumerable<Move> CalculateKnightMoves(int position, Board board)
         {
             List<Move> moves = new List<Move>(8);
-            File file = (File)(position % 8);
-            int row = position / 8;
+            File file = (File)(Utils.PositionToFile(position));
+            int row = Utils.PositionToRow(position);
             var ownColor = board.Squares[position].HasFlag(Piece.White) ? Piece.White : Piece.Black;
             
             if(file != File.A)
@@ -112,8 +112,8 @@ namespace ChessWasm.Services
         {
             List<Move> moves = new List<Move>(8);
 
-            int file = position % 8;
-            int row = position / 8;
+            int file = Utils.PositionToFile(position);
+            int row = Utils.PositionToRow(position);
 
             var opponentColor = board.Squares[position].HasFlag(Piece.White) ? Piece.Black : Piece.White;
             var ownColor = board.Squares[position].HasFlag(Piece.White) ? Piece.White : Piece.Black;
@@ -197,8 +197,8 @@ namespace ChessWasm.Services
         {
             List<Move> moves = new List<Move>(8);
 
-            int file = position % 8;
-            int row = position / 8;
+            int file = Utils.PositionToFile(position);
+            int row = Utils.PositionToRow(position);
 
             int newFile = file - 1;
             int newRow = row - 1;
@@ -279,8 +279,8 @@ namespace ChessWasm.Services
         {
             List<Move> moves = new List<Move>(8);
 
-            int file = position % 8;
-            int row = position / 8;
+            int file = Utils.PositionToFile(position);
+            int row = Utils.PositionToRow(position);
 
             var opponentColor = board.Squares[position].HasFlag(Piece.White) ? Piece.Black : Piece.White;
             var ownColor = board.Squares[position].HasFlag(Piece.White) ? Piece.White : Piece.Black;
@@ -307,8 +307,8 @@ namespace ChessWasm.Services
         {
             List<Move> moves = new List<Move>(8);
 
-            int file = position % 8;
-            int row = position / 8;
+            int file = Utils.PositionToFile(position);
+            int row = Utils.PositionToRow(position);
 
             // TODO: En Passant
 
@@ -372,7 +372,7 @@ namespace ChessWasm.Services
             return moves;
         }
 
-        private static bool KingIsInCheckAfterMove(Board board, Move move) 
+        public static bool IsLegalMove(Board board, Move move) 
         {
             var squaresCopy = new Piece[64];
             Array.Copy(board.Squares, squaresCopy, 64);
@@ -403,8 +403,8 @@ namespace ChessWasm.Services
                         }
 
                         // close direction when out of bounds
-                        int row = kingPosition / 8 + i;
-                        int file = kingPosition % 8 + j;
+                        int row = Utils.PositionToRow(kingPosition) + i;
+                        int file = Utils.PositionToFile(kingPosition) % 8 + j;
                         if(row < 0 || row > 7 || file < 0 || file > 7 || (i == 0 && j == 0)) 
                         {
                             directionsChecked[Math.Sign(i) + 1, Math.Sign(j) + 1] = true;
@@ -477,18 +477,7 @@ namespace ChessWasm.Services
                 }
             }
 
-            return isInCheck;
-        }
-
-        public static bool MoveIsLegal(Move move, Board board)
-        {
-            return MoveIsLegal(move.From, move.To, board);
-        }
-
-        private static bool MoveIsLegal(int from, int to, Board board)
-        {
-            // TODO: implement
-            return true;
+            return !isInCheck;
         }
     }
 }

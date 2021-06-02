@@ -21,6 +21,8 @@ namespace ChessWasm.Models
         */
         public Piece[] Squares { get; private set; }
 
+        public Move LastMove { get; set; }
+
         public Board() 
         {
             Reset();
@@ -41,10 +43,11 @@ namespace ChessWasm.Models
             };
         }
 
-        public void MakeMove(int from, int to)
+        public void MakeMove(Move move)
         {
-            Squares[to] = Squares[from];
-            Squares[from] = 0;
+            Squares[move.To] = Squares[move.From];
+            Squares[move.From] = 0;
+            LastMove = move;
         }
     }
 }

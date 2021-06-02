@@ -23,14 +23,14 @@ namespace ChessWasm.Services
         public static void RandomMove()
         {
             Move move = MoveService.GetRandomMove(CurrentGame.Board);
-            CurrentGame.MakeMove(move.From, move.To);
+            CurrentGame.MakeMove(move);
             RefreshPossibleMoves();
             BoardChanged?.Invoke(CurrentGame.Board);
         }
 
-        public static void TryMakeMove(int fromX, int fromY, int toX, int toY)
+        public static void TryMakeMove(Move move)
         {
-            CurrentGame.MakeMove(fromX * 8 + fromY, toX * 8 + toY);
+            CurrentGame.MakeMove(move);
             RefreshPossibleMoves();
             BoardChanged?.Invoke(CurrentGame.Board);
         }
