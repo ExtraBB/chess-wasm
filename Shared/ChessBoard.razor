@@ -26,7 +26,6 @@
 @code {
     private Piece[] squares;
     private (int x, int y) highlightedPiece = (-1,-1);
-    private Dictionary<int, IEnumerable<Move>> possibleMoves;
 
     public ChessBoard() 
     {
@@ -37,7 +36,6 @@
     {
         squares = board.Squares;
         highlightedPiece = (-1, -1);
-        possibleMoves = GameService.GetAllPossibleMoves();
         this.StateHasChanged();
     }
 
@@ -53,13 +51,13 @@
 
     private bool IsPossibleMove(int position) 
     {
-        if(possibleMoves == null || highlightedPiece.x == -1 || highlightedPiece.y == -1) 
+        if(GameService.CurrentGame == null || GameService.CurrentGame.PossibleMoves == null || highlightedPiece.x == -1 || highlightedPiece.y == -1) 
         {
             return false;
         }
 
         int highlightedPosition = highlightedPiece.x * 8 + highlightedPiece.y;
-        return possibleMoves.ContainsKey(highlightedPosition) && possibleMoves[highlightedPosition].Any(move => move.To == position);
+        return GameService.CurrentGame.PossibleMoves.ContainsKey(highlightedPosition) && GameService.CurrentGame.PossibleMoves[highlightedPosition].Any(move => move.To == position);
     }
 
     private string GetImageForPiece(Piece piece) 

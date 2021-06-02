@@ -15,6 +15,7 @@ namespace ChessWasm.Services
         public static Game StartGame() 
         {
             CurrentGame = new Game();
+            RefreshPossibleMoves();
             BoardChanged?.Invoke(CurrentGame.Board);
             return CurrentGame;
         }
@@ -23,19 +24,20 @@ namespace ChessWasm.Services
         {
             Move move = MoveService.GetRandomMove(CurrentGame.Board);
             CurrentGame.MakeMove(move.From, move.To);
-
+            RefreshPossibleMoves();
             BoardChanged?.Invoke(CurrentGame.Board);
         }
 
         public static void TryMakeMove(int fromX, int fromY, int toX, int toY)
         {
             CurrentGame.MakeMove(fromX * 8 + fromY, toX * 8 + toY);
+            RefreshPossibleMoves();
             BoardChanged?.Invoke(CurrentGame.Board);
         }
 
-        public static Dictionary<int, IEnumerable<Move>> GetAllPossibleMoves()
+        public static void RefreshPossibleMoves()
         {
-            return MoveService.GetAllPossibleMoves(CurrentGame.Board);
+            CurrentGame.PossibleMoves = MoveService.GetAllPossibleMoves(CurrentGame.Board);
         }
     }
 }

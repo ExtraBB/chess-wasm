@@ -1,8 +1,11 @@
+using System.Collections.Generic;
+
 namespace ChessWasm.Models
 {
     public class Game
     {
         public Board Board { get; private set; }
+        public Dictionary<int, IEnumerable<Move>> PossibleMoves {get; set; }
 
         public Game() 
         {
