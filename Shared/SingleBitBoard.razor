@@ -2,7 +2,7 @@
 @using ChessWasm.Services
 
 <div class="board">
-    @for(int row = 0; row < 8; row++)
+    @for(int row = 7; row >= 0; row--)
     {
         <div class="board-row">
             @for(int file = 0; file < 8; file++)
@@ -11,7 +11,7 @@
                 <div class="square @(GetClassForSquare(row, file))">
                     @if(((Bits >> position) & 1) == 1)
                     {
-                        <img src="/assets/@(Image).png" />
+                        <img src="/assets/@(Image).png" width="16" height="16"/>
                     }
                 </div>
             }
@@ -19,14 +19,17 @@
     }
 </div>
 @code {
-    
+
     [Parameter]
-    public UInt64 Bits { get; set; }
+    public UInt64 Bits { get; set; } = 0;
+
+    [Parameter]
+    public EventCallback<UInt64> BitsChanged { get; set; }
 
     [Parameter]
     public string Image { get; set; }
 
-    public BitBoard() 
+    public SingleBitBoard() 
     {
     }
 

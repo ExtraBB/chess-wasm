@@ -6,22 +6,24 @@ namespace ChessWasm.Models
 {
     public class Game
     {
-        public Board Board { get; private set; }
-        public Dictionary<int, IEnumerable<Move>> PossibleMoves {get; set; }
+        public Board OldBoard { get; private set; }
+        public BitBoard Board { get; private set; }
+        public Dictionary<int, IEnumerable<OldMove>> PossibleMoves {get; set; }
         public Piece CurrentPlayer = Piece.White;
         public Piece Winner = 0;
 
         public Game() 
         {
-            Board = new Board();
+            OldBoard = new Board();
+            Board = new BitBoard();
             RefreshPossibleMoves();
         }
 
-        public void MakeMove(Move move) 
+        public void MakeMove(OldMove move) 
         {
-            if(MoveService.IsLegalMove(Board, move)) 
+            if(MoveService.IsLegalMove(OldBoard, move)) 
             {
-                CurrentPlayer = Board.MakeMove(move);
+                CurrentPlayer = OldBoard.MakeMove(move);
                 RefreshPossibleMoves();
                 CheckForEnd();
             }
@@ -29,7 +31,7 @@ namespace ChessWasm.Models
 
         private void RefreshPossibleMoves()
         {
-            PossibleMoves = MoveService.GetAllPossibleMoves(Board, CurrentPlayer);
+            PossibleMoves = MoveService.GetAllPossibleMoves(OldBoard, CurrentPlayer);
         }
 
         public void CheckForEnd() 

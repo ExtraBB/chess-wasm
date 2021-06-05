@@ -1,4 +1,6 @@
-namespace ChessWasm.Services
+using System;
+
+namespace ChessWasm
 {
     public static class Utils
     {
@@ -12,7 +14,7 @@ namespace ChessWasm.Services
             return position / 8;
         }
 
-       public static int PositionToFile(int position) 
+        public static int PositionToFile(int position) 
         {
             return position % 8;
         }

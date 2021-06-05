@@ -74,7 +74,7 @@
     {
         if(GameService.CurrentGame.PossibleMoves.ContainsKey(highlightedPosition)) 
         {
-            Move move = GameService.CurrentGame.PossibleMoves[highlightedPosition].FirstOrDefault(move => move.To == newPosition);
+            OldMove move = GameService.CurrentGame.PossibleMoves[highlightedPosition].FirstOrDefault(move => move.To == newPosition);
             if(move != null) 
             {
                 GameService.TryMakeMove(move);

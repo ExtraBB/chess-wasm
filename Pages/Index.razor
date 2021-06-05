@@ -2,7 +2,7 @@
 @inject IJSRuntime JsRuntime;
 @using ChessWasm.Models;
 @using ChessWasm.Services;
-@using ChessWasm.Shared;
+@using ChessWasm.Moves;
 
 <div class="main">
     <button class="btn btn-success btn-start" @onclick="StartGame">New Game</button>
@@ -12,26 +12,41 @@
             <ChessBoard /> 
         </div>
         <div class="bitboards">
-            <BitBoard Image="king-white" />
-            <BitBoard Image="king-black" />
-            <BitBoard Image="queen-white" />
-            <BitBoard Image="queen-black" />
-            <BitBoard Image="bishop-white" />
-            <BitBoard Image="bishop-black" />
-            <BitBoard Image="knight-white" />
-            <BitBoard Image="knight-black" />
-            <BitBoard Image="rook-white" />
-            <BitBoard Image="rook-black" />
-            <BitBoard Image="pawn-white" />
-            <BitBoard Image="pawn-black" />
+            <SingleBitBoard Image="Rook_white" @bind-Bits="@(board.WRooks)" />
+            <SingleBitBoard Image="Rook_black" @bind-Bits="@(board.BRooks)" />
+            <SingleBitBoard Image="Knight_white" @bind-Bits="@(board.WKnights)" />
+            <SingleBitBoard Image="Knight_black" @bind-Bits="@(board.BKnights)" />
+            <SingleBitBoard Image="Bishop_white" @bind-Bits="@(board.WBishops)" />
+            <SingleBitBoard Image="Bishop_black" @bind-Bits="@(board.BBishops)" />
+            <SingleBitBoard Image="Queen_white" @bind-Bits="@(board.WQueen)" />
+            <SingleBitBoard Image="Queen_black" @bind-Bits="@(board.BQueen)" />
+            <SingleBitBoard Image="King_white" @bind-Bits="@(board.WKing)" />
+            <SingleBitBoard Image="King_black" @bind-Bits="@(board.BKing)" />
+            <SingleBitBoard Image="Pawn_white" @bind-Bits="@(board.WPawns)" />
+            <SingleBitBoard Image="Pawn_black" @bind-Bits="@(board.BPawns)" />
         </div>
     </div>
 </div>
 
 @code {
+    BitBoard board = new BitBoard();
     private void StartGame()
     {
         GameService.StartGame();
+        board = GameService.CurrentGame.Board;
+
+        // debug
+        Console.WriteLine("--- White Pawn Moves: ---");
+        foreach(var move in PawnMoves.CalculateWPawnMoves(board, null))
+        {
+            Console.WriteLine($"From: {move.From}, To: {move.To}, SpecialMove: {move.SpecialMove}, PromotionType: {move.PromotionType}");
+        }
+
+        Console.WriteLine("--- Black Pawn Moves: ---");
+        foreach(var move in PawnMoves.CalculateBPawnMoves(board, null))
+        {
+            Console.WriteLine($"From: {move.From}, To: {move.To}, SpecialMove: {move.SpecialMove}, PromotionType: {move.PromotionType}");
+        }
     }
 
 }

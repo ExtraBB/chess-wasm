@@ -7,13 +7,13 @@ namespace ChessWasm.Services
 {
     public static class MoveService
     {
-        public static Dictionary<int, IEnumerable<Move>> GetAllPossibleMoves(Board board, Piece player)
+        public static Dictionary<int, IEnumerable<OldMove>> GetAllPossibleMoves(Board board, Piece player)
         {
-            Dictionary<int, IEnumerable<Move>> result = new Dictionary<int, IEnumerable<Move>>();
+            Dictionary<int, IEnumerable<OldMove>> result = new Dictionary<int, IEnumerable<OldMove>>();
 
             for(int i = 0; i < 64; i++) 
             {
-                IEnumerable<Move> moves = CalculateMovesForPiece(i, board, player);
+                IEnumerable<OldMove> moves = CalculateMovesForPiece(i, board, player);
                 if(moves != null) 
                 {
                     result.Add(i, moves);
@@ -23,7 +23,7 @@ namespace ChessWasm.Services
             return result;
         }
 
-        private static IEnumerable<Move> CalculateMovesForPiece(int position, Board board, Piece player)
+        private static IEnumerable<OldMove> CalculateMovesForPiece(int position, Board board, Piece player)
         {
             Piece piece = board.Squares[position];
             if(piece == 0 || !piece.HasFlag(player)) 
@@ -31,7 +31,7 @@ namespace ChessWasm.Services
                 return null;
             }
 
-            IEnumerable<Move> moves = new List<Move>();
+            IEnumerable<OldMove> moves = new List<OldMove>();
 
             if(piece.HasFlag(Piece.Knight))
             {
@@ -61,43 +61,43 @@ namespace ChessWasm.Services
             return moves.Where(m => IsLegalMove(board, m));
         }
 
-        private static IEnumerable<Move> CalculateKnightMoves(int position, Board board)
+        private static IEnumerable<OldMove> CalculateKnightMoves(int position, Board board)
         {
-            List<Move> moves = new List<Move>(8);
+            List<OldMove> moves = new List<OldMove>(8);
             File file = (File)(Utils.PositionToFile(position));
             int row = Utils.PositionToRow(position);
             var ownColor = board.Squares[position].HasFlag(Piece.White) ? Piece.White : Piece.Black;
             
             if(file != File.A)
             {
-                if(row > 1) moves.Add(new Move(){ From = position, To = position - 17, Player = ownColor });
-                if(row < 6) moves.Add(new Move(){ From = position, To = position + 15, Player = ownColor });
+                if(row > 1) moves.Add(new OldMove(){ From = position, To = position - 17, Player = ownColor });
+                if(row < 6) moves.Add(new OldMove(){ From = position, To = position + 15, Player = ownColor });
             }
 
             if(file > File.B)
             {
-                if(row > 0) moves.Add(new Move(){ From = position, To = position - 10, Player = ownColor });
-                if(row < 7) moves.Add(new Move(){ From = position, To = position + 6, Player = ownColor });
+                if(row > 0) moves.Add(new OldMove(){ From = position, To = position - 10, Player = ownColor });
+                if(row < 7) moves.Add(new OldMove(){ From = position, To = position + 6, Player = ownColor });
             }
 
             if(file != File.H)
             {
-                if(row < 6) moves.Add(new Move(){ From = position, To = position + 17, Player = ownColor });
-                if(row > 1) moves.Add(new Move(){ From = position, To = position - 15, Player = ownColor });
+                if(row < 6) moves.Add(new OldMove(){ From = position, To = position + 17, Player = ownColor });
+                if(row > 1) moves.Add(new OldMove(){ From = position, To = position - 15, Player = ownColor });
             }
 
             if(file < File.G)
             {
-                if(row < 7) moves.Add(new Move(){ From = position, To = position + 10, Player = ownColor });
-                if(row > 0) moves.Add(new Move(){ From = position, To = position - 6, Player = ownColor });
+                if(row < 7) moves.Add(new OldMove(){ From = position, To = position + 10, Player = ownColor });
+                if(row > 0) moves.Add(new OldMove(){ From = position, To = position - 6, Player = ownColor });
             }
 
             return moves.Where(move => !board.Squares[move.To].HasFlag(ownColor));
         }
 
-        private static List<Move> CalculateRookMoves(int position, Board board)
+        private static List<OldMove> CalculateRookMoves(int position, Board board)
         {
-            List<Move> moves = new List<Move>(8);
+            List<OldMove> moves = new List<OldMove>(8);
 
             int file = Utils.PositionToFile(position);
             int row = Utils.PositionToRow(position);
@@ -110,11 +110,11 @@ namespace ChessWasm.Services
                 var newPosition = Utils.RowFileToPosition(row, f);
                 if(board.Squares[newPosition] == 0) 
                 {
-                     moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                     moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
                 }
                 else if(board.Squares[newPosition].HasFlag(opponentColor))
                 {
-                    moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                    moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
                     break;
                 }
                 else
@@ -128,11 +128,11 @@ namespace ChessWasm.Services
                 var newPosition = Utils.RowFileToPosition(row, f);
                 if(board.Squares[newPosition] == 0) 
                 {
-                     moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                     moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
                 }
                 else if(board.Squares[newPosition].HasFlag(opponentColor))
                 {
-                    moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                    moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
                     break;
                 }
                 else
@@ -146,11 +146,11 @@ namespace ChessWasm.Services
                 var newPosition = Utils.RowFileToPosition(r, file);
                 if(board.Squares[newPosition] == 0) 
                 {
-                     moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                     moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
                 }
                 else if(board.Squares[newPosition].HasFlag(opponentColor))
                 {
-                    moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                    moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
                     break;
                 }
                 else
@@ -164,11 +164,11 @@ namespace ChessWasm.Services
                 var newPosition = Utils.RowFileToPosition(r, file);
                 if(board.Squares[newPosition] == 0) 
                 {
-                     moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                     moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
                 }
                 else if(board.Squares[newPosition].HasFlag(opponentColor))
                 {
-                    moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                    moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
                     break;
                 }
                 else
@@ -180,9 +180,9 @@ namespace ChessWasm.Services
             return moves;
         }
 
-        private static List<Move> CalculateBishopMoves(int position, Board board)
+        private static List<OldMove> CalculateBishopMoves(int position, Board board)
         {
-            List<Move> moves = new List<Move>(8);
+            List<OldMove> moves = new List<OldMove>(8);
 
             int file = Utils.PositionToFile(position);
             int row = Utils.PositionToRow(position);
@@ -197,7 +197,7 @@ namespace ChessWasm.Services
                 var newPosition = Utils.RowFileToPosition(newRow, newFile);
                 if(board.Squares[newPosition].HasFlag(ownColor)) break;
 
-                moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor});
+                moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor});
 
                 if(board.Squares[newPosition] == 0)
                 {
@@ -214,7 +214,7 @@ namespace ChessWasm.Services
                 var newPosition = Utils.RowFileToPosition(newRow, newFile);
                 if(board.Squares[newPosition].HasFlag(ownColor)) break;
 
-                moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
 
                 if(board.Squares[newPosition] == 0)
                 {
@@ -232,7 +232,7 @@ namespace ChessWasm.Services
                 var newPosition = Utils.RowFileToPosition(newRow, newFile);
                 if(board.Squares[newPosition].HasFlag(ownColor)) break;
 
-                moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
 
                 if(board.Squares[newPosition] == 0)
                 {
@@ -249,7 +249,7 @@ namespace ChessWasm.Services
                 var newPosition = Utils.RowFileToPosition(newRow, newFile);
                 if(board.Squares[newPosition].HasFlag(ownColor)) break;
 
-                moves.Add(new Move(){ From = position, To = newPosition, Player = ownColor });
+                moves.Add(new OldMove(){ From = position, To = newPosition, Player = ownColor });
 
                 if(board.Squares[newPosition] == 0)
                 {
@@ -262,9 +262,9 @@ namespace ChessWasm.Services
             return moves;
         }
 
-        private static List<Move> CalculateKingMoves(int position, Board board)
+        private static List<OldMove> CalculateKingMoves(int position, Board board)
         {
-            List<Move> moves = new List<Move>(8);
+            List<OldMove> moves = new List<OldMove>(8);
 
             int file = Utils.PositionToFile(position);
             int row = Utils.PositionToRow(position);
@@ -283,16 +283,16 @@ namespace ChessWasm.Services
                     int to = Utils.RowFileToPosition(newRow, newFile);
                     if(newFile >= 0 && newFile < 8 && newRow >= 0 && newRow < 8 && (board.Squares[to] == 0 || board.Squares[to].HasFlag(opponentColor)))
                     {
-                         moves.Add(new Move(){ From = position, To = to, Player = ownColor });
+                         moves.Add(new OldMove(){ From = position, To = to, Player = ownColor });
                     }
                 }
             }
             return moves;
         }
 
-        private static List<Move> CalculatePawnMoves(int position, Board board, bool white)
+        private static List<OldMove> CalculatePawnMoves(int position, Board board, bool white)
         {
-            List<Move> moves = new List<Move>(8);
+            List<OldMove> moves = new List<OldMove>(8);
 
             int file = Utils.PositionToFile(position);
             int row = Utils.PositionToRow(position);
@@ -304,19 +304,19 @@ namespace ChessWasm.Services
                 int to = Utils.RowFileToPosition(row - 1, file);
                 if(board.Squares[to] == 0)
                 {
-                    moves.Add(new Move(){ From = position, To = to, Player = Piece.White });
+                    moves.Add(new OldMove(){ From = position, To = to, Player = Piece.White });
                 }
 
                 to = Utils.RowFileToPosition(row - 1, file - 1);
                 if(file > 0 && board.Squares[to].HasFlag(Piece.Black))
                 {
-                    moves.Add(new Move(){ From = position, To = to, Player = Piece.White });
+                    moves.Add(new OldMove(){ From = position, To = to, Player = Piece.White });
                 }
 
                 to = Utils.RowFileToPosition(row - 1, file + 1);
                 if(file < 7 && board.Squares[to].HasFlag(Piece.Black))
                 {
-                    moves.Add(new Move(){ From = position, To = to, Player = Piece.White });
+                    moves.Add(new OldMove(){ From = position, To = to, Player = Piece.White });
                 }
 
                 // Starting row
@@ -324,7 +324,7 @@ namespace ChessWasm.Services
                 int between = Utils.RowFileToPosition(row - 1, file);
                 if(row == 6 && board.Squares[to] == 0 && board.Squares[between] == 0) 
                 {
-                    moves.Add(new Move(){ From = position, To = to, Player = Piece.White });
+                    moves.Add(new OldMove(){ From = position, To = to, Player = Piece.White });
                 }
             } 
             else if(!white && row < 7)
@@ -332,19 +332,19 @@ namespace ChessWasm.Services
                 int to = Utils.RowFileToPosition(row + 1, file);
                 if(board.Squares[to] == 0)
                 {
-                    moves.Add(new Move(){ From = position, To = to, Player = Piece.Black });
+                    moves.Add(new OldMove(){ From = position, To = to, Player = Piece.Black });
                 }
 
                 to = Utils.RowFileToPosition(row + 1, file - 1);
                 if(file > 0 && board.Squares[to].HasFlag(Piece.White))
                 {
-                    moves.Add(new Move(){ From = position, To = to, Player = Piece.Black });
+                    moves.Add(new OldMove(){ From = position, To = to, Player = Piece.Black });
                 }
 
                 to = Utils.RowFileToPosition(row + 1, file + 1);
                 if(file < 7 && board.Squares[to].HasFlag(Piece.White))
                 {
-                    moves.Add(new Move(){ From = position, To = to, Player = Piece.Black });
+                    moves.Add(new OldMove(){ From = position, To = to, Player = Piece.Black });
                 }
 
                 // Starting row
@@ -352,14 +352,14 @@ namespace ChessWasm.Services
                 int between = Utils.RowFileToPosition(row + 1, file);
                 if(row == 1 && board.Squares[to] == 0 && board.Squares[between] == 0) 
                 {
-                    moves.Add(new Move(){ From = position, To = to, Player = Piece.Black });
+                    moves.Add(new OldMove(){ From = position, To = to, Player = Piece.Black });
                 }   
             } 
 
             return moves;
         }
 
-        public static bool IsLegalMove(Board board, Move move) 
+        public static bool IsLegalMove(Board board, OldMove move) 
         {
             var squaresCopy = new Piece[64];
             Array.Copy(board.Squares, squaresCopy, 64);
