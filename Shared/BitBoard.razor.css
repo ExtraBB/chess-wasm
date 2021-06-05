@@ -1,0 +1,27 @@
+.board {
+    width: 128px;
+    height: 128px;
+}
+
+.board-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.square {
+    width: 16px;
+    height: 16px;
+    position: relative;
+}
+
+.square-light {
+    background-color: #ebecd0;
+}
+
+.square-dark {
+    background-color: #779556;
+}
+
+.square img {
+    margin: 2px 0 0 2px;
+}

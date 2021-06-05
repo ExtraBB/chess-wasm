@@ -4,13 +4,29 @@
 @using ChessWasm.Services;
 @using ChessWasm.Shared;
 
-<h1>Hello, world!</h1>
+<div class="main">
+    <button class="btn btn-success btn-start" @onclick="StartGame">New Game</button>
 
-<div>
-    <button @onclick="StartGame">New Game</button>
+    <div class="boards">
+        <div class="main-board">
+            <ChessBoard /> 
+        </div>
+        <div class="bitboards">
+            <BitBoard Image="king-white" />
+            <BitBoard Image="king-black" />
+            <BitBoard Image="queen-white" />
+            <BitBoard Image="queen-black" />
+            <BitBoard Image="bishop-white" />
+            <BitBoard Image="bishop-black" />
+            <BitBoard Image="knight-white" />
+            <BitBoard Image="knight-black" />
+            <BitBoard Image="rook-white" />
+            <BitBoard Image="rook-black" />
+            <BitBoard Image="pawn-white" />
+            <BitBoard Image="pawn-black" />
+        </div>
+    </div>
 </div>
-
-<ChessBoard /> 
 
 @code {
     private void StartGame()

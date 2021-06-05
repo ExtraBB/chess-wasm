@@ -1,0 +1,35 @@
+.main {
+    padding: 32px;
+}
+
+.btn-start {
+    display: block;
+    margin: 0 auto;
+}
+
+.boards {
+    display: flex;
+    margin: 32px 0;
+}
+
+.bitboards {
+    display: flex;
+    flex-wrap: wrap;
+    width: 624px;
+    height: 512px;
+    margin: 0 32px;
+    align-content: space-between;
+}
+
+.main-board {
+    margin: 0 132px;
+}
+
+.bitboards ::deep > * {
+    flex: 1 1 128px;
+    margin-right: 8px;
+}
+
+.bitboards ::deep > *:nth-child(even) {
+    margin-right: 32px;
+}

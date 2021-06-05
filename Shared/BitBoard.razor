@@ -1,0 +1,39 @@
+@namespace ChessWasm.Shared
+@using ChessWasm.Services
+
+<div class="board">
+    @for(int row = 0; row < 8; row++)
+    {
+        <div class="board-row">
+            @for(int file = 0; file < 8; file++)
+            {
+                int position = Utils.RowFileToPosition(row, file);
+                <div class="square @(GetClassForSquare(row, file))">
+                    @if(((Bits >> position) & 1) == 1)
+                    {
+                        <img src="/assets/@(Image).png" />
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+@code {
+    
+    [Parameter]
+    public UInt64 Bits { get; set; }
+
+    [Parameter]
+    public string Image { get; set; }
+
+    public BitBoard() 
+    {
+    }
+
+    private string GetClassForSquare(int row, int file) 
+    {
+        return row % 2 == 0 
+                ? (file % 2 == 0 ? "square-light" : "square-dark")
+                : (file % 2 == 0 ? "square-dark" : "square-light");
+    }
+}
