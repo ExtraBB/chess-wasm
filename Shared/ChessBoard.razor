@@ -7,16 +7,16 @@
     <div class="winner-text">@(winnerText)</div>
 }
 <div class="board">
-    @for(int row = 0; row < 8; row++)
+    @for(int row = 7; row >= 0; row--)
     {
         <div class="board-row">
             @for(int file = 0; file < 8; file++)
             {
                 int position = Utils.RowFileToPosition(row, file);
                 <div class="square @(GetClassForSquare(row, file))" @onclick="(() => SquareClicked(position))">
-                    @if(squares != null && squares[position] != 0)
+                    @if(SquareHasPiece(position))
                     {
-                        <img src="/assets/@(GetImageForPiece(squares[position])).png" />
+                        <img src="/assets/@(GetImageForSquare(position)).png" />
                     }
                     @if(IsPossibleMove(position))
                     {
@@ -28,7 +28,6 @@
     }
 </div>
 @code {
-    private Piece[] squares;
     private int highlightedPosition = -1;
     private string winnerText = null;
 
@@ -39,7 +38,6 @@
 
     private void UpdateBoard(Board board)
     {
-        squares = board.Squares;
         highlightedPosition = -1;
         this.StateHasChanged();
     }
@@ -61,29 +59,28 @@
             return false;
         }
 
-        return GameService.CurrentGame.PossibleMoves.ContainsKey(highlightedPosition) && GameService.CurrentGame.PossibleMoves[highlightedPosition].Any(move => move.To == position);
-    }
-
-    private string GetImageForPiece(Piece piece) 
-    {
-        string color = piece.HasFlag(Piece.White) ? "white" : "black";
-        return $"{(piece & ~Piece.White & ~Piece.Black).ToString()}_{color}";
+        var movesFromSquare = GameService.CurrentGame.PossibleMoves.Where(move => move.From == highlightedPosition);
+        return movesFromSquare.Any(move => move.To == position);
     }
 
     private void SquareClicked(int newPosition) 
     {
-        if(GameService.CurrentGame.PossibleMoves.ContainsKey(highlightedPosition)) 
+        if(GameService.CurrentGame == null)
         {
-            OldMove move = GameService.CurrentGame.PossibleMoves[highlightedPosition].FirstOrDefault(move => move.To == newPosition);
+            return;
+        }
+
+        var movesFromSquare = GameService.CurrentGame.PossibleMoves.Where(move => move.From == highlightedPosition);
+        if(movesFromSquare.Any()) 
+        {
+            Move move = movesFromSquare.FirstOrDefault(move => move.To == newPosition);
             if(move != null) 
             {
                 GameService.TryMakeMove(move);
                 if(GameService.CurrentGame.Winner != 0)
                 {
-                    string winner = GameService.CurrentGame.Winner == Piece.White ? "White" : "Black";
-                    winnerText = $"{winner} has won!";
+                    winnerText = $"{GameService.CurrentGame.Winner.ToString()} has won!";
                     GameService.ClearGame();
-                    squares = null;
                     this.StateHasChanged();
                 }
                 highlightedPosition = -1;
@@ -99,5 +96,35 @@
         {
             highlightedPosition = newPosition;
         }
+    }
+
+    private bool SquareHasPiece(int position)
+    {
+        return GameService.CurrentGame != null && GameService.CurrentGame.Board.Occupied.NthBitSet(position);
+    }
+
+    private string GetImageForSquare(int position)
+    {
+        if(GameService.CurrentGame == null)
+        {
+            return null;
+        }
+
+        var board = GameService.CurrentGame.Board;
+
+        if(board.WRooks.NthBitSet(position)) return "Rook_white";
+        if(board.WKnights.NthBitSet(position)) return "Knight_white";
+        if(board.WBishops.NthBitSet(position)) return "Bishop_white";
+        if(board.WQueen.NthBitSet(position)) return "Queen_white";
+        if(board.WKing.NthBitSet(position)) return "King_white";
+        if(board.WPawns.NthBitSet(position)) return "Pawn_white";
+        if(board.BRooks.NthBitSet(position)) return "Rook_black";
+        if(board.BKnights.NthBitSet(position)) return "Knight_black";
+        if(board.BBishops.NthBitSet(position)) return "Bishop_black";
+        if(board.BQueen.NthBitSet(position)) return "Queen_black";
+        if(board.BKing.NthBitSet(position)) return "King_black";
+        if(board.BPawns.NthBitSet(position)) return "Pawn_black";
+
+        return null;
     }
 }

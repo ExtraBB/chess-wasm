@@ -2,7 +2,7 @@
 @inject IJSRuntime JsRuntime;
 @using ChessWasm.Models;
 @using ChessWasm.Services;
-@using ChessWasm.Moves;
+@using ChessWasm.Shared;
 
 <div class="main">
     <button class="btn btn-success btn-start" @onclick="StartGame">New Game</button>
@@ -12,41 +12,34 @@
             <ChessBoard /> 
         </div>
         <div class="bitboards">
-            <SingleBitBoard Image="Rook_white" @bind-Bits="@(board.WRooks)" />
-            <SingleBitBoard Image="Rook_black" @bind-Bits="@(board.BRooks)" />
-            <SingleBitBoard Image="Knight_white" @bind-Bits="@(board.WKnights)" />
-            <SingleBitBoard Image="Knight_black" @bind-Bits="@(board.BKnights)" />
-            <SingleBitBoard Image="Bishop_white" @bind-Bits="@(board.WBishops)" />
-            <SingleBitBoard Image="Bishop_black" @bind-Bits="@(board.BBishops)" />
-            <SingleBitBoard Image="Queen_white" @bind-Bits="@(board.WQueen)" />
-            <SingleBitBoard Image="Queen_black" @bind-Bits="@(board.BQueen)" />
-            <SingleBitBoard Image="King_white" @bind-Bits="@(board.WKing)" />
-            <SingleBitBoard Image="King_black" @bind-Bits="@(board.BKing)" />
-            <SingleBitBoard Image="Pawn_white" @bind-Bits="@(board.WPawns)" />
-            <SingleBitBoard Image="Pawn_black" @bind-Bits="@(board.BPawns)" />
+            <BitBoard Image="Rook_white" @bind-Bits="@(board.WRooks)" />
+            <BitBoard Image="Rook_black" @bind-Bits="@(board.BRooks)" />
+            <BitBoard Image="Knight_white" @bind-Bits="@(board.WKnights)" />
+            <BitBoard Image="Knight_black" @bind-Bits="@(board.BKnights)" />
+            <BitBoard Image="Bishop_white" @bind-Bits="@(board.WBishops)" />
+            <BitBoard Image="Bishop_black" @bind-Bits="@(board.BBishops)" />
+            <BitBoard Image="Queen_white" @bind-Bits="@(board.WQueen)" />
+            <BitBoard Image="Queen_black" @bind-Bits="@(board.BQueen)" />
+            <BitBoard Image="King_white" @bind-Bits="@(board.WKing)" />
+            <BitBoard Image="King_black" @bind-Bits="@(board.BKing)" />
+            <BitBoard Image="Pawn_white" @bind-Bits="@(board.WPawns)" />
+            <BitBoard Image="Pawn_black" @bind-Bits="@(board.BPawns)" />
         </div>
     </div>
 </div>
 
 @code {
-    BitBoard board = new BitBoard();
+    Board board = new Board();
     private void StartGame()
     {
         GameService.StartGame();
         board = GameService.CurrentGame.Board;
-
-        // debug
-        Console.WriteLine("--- White Pawn Moves: ---");
-        foreach(var move in PawnMoves.CalculateWPawnMoves(board, null))
-        {
-            Console.WriteLine($"From: {move.From}, To: {move.To}, SpecialMove: {move.SpecialMove}, PromotionType: {move.PromotionType}");
-        }
-
-        Console.WriteLine("--- Black Pawn Moves: ---");
-        foreach(var move in PawnMoves.CalculateBPawnMoves(board, null))
-        {
-            Console.WriteLine($"From: {move.From}, To: {move.To}, SpecialMove: {move.SpecialMove}, PromotionType: {move.PromotionType}");
-        }
+        GameService.BoardChanged += UpdateBoard;
+        MagicService.Initialize();
     }
 
+    private void UpdateBoard(Board board)
+    {
+        this.StateHasChanged();
+    }
 }

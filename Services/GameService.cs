@@ -15,7 +15,7 @@ namespace ChessWasm.Services
         public static Game StartGame() 
         {
             CurrentGame = new Game();
-            BoardChanged?.Invoke(CurrentGame.OldBoard);
+            BoardChanged?.Invoke(CurrentGame.Board);
             return CurrentGame;
         }
 
@@ -24,10 +24,10 @@ namespace ChessWasm.Services
             CurrentGame = null;
         }
 
-        public static void TryMakeMove(OldMove move)
+        public static void TryMakeMove(Move move)
         {
             CurrentGame.MakeMove(move);
-            BoardChanged?.Invoke(CurrentGame.OldBoard);
+            BoardChanged?.Invoke(CurrentGame.Board);
         }
     }
 }

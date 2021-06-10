@@ -25,26 +25,19 @@ namespace ChessWasm.Models
 
     public class Move
     {
-        public const int ToBits = 0x3F; // bit 0-5
-        public const int FromBits = 0xFC0; // bit 6-11
-        public const int PromotionBits = 0x3000; // bit 12-13
-        public const int SpecialMoveBits = 0xC000; // bit 14-15
+        public Piece Piece { get; set; }
+        public int To { get; set; }
+        public int From { get; set; }
+        public PromotionType PromotionType { get; set; }
+        public SpecialMove SpecialMove { get; set; }
 
-        private uint encodedMove;
-
-        public uint To { get => encodedMove & ToBits; }
-        public uint From { get => (encodedMove & FromBits) >> 6; }
-        public PromotionType PromotionType { get => (PromotionType)((encodedMove & PromotionBits) >> 12); }
-        public SpecialMove SpecialMove { get => (SpecialMove)((encodedMove & SpecialMoveBits) >> 14); }
-
-        public Move(uint _encodedMove)
+        public Move(Piece piece, int from, int to, PromotionType promotion = PromotionType.Queen, SpecialMove specialMove = SpecialMove.None)
         {
-            encodedMove = _encodedMove;
-        }
-
-        public Move(uint From, uint To, PromotionType promotion = PromotionType.Queen, SpecialMove specialMove = SpecialMove.None)
-        {
-            encodedMove = To | (From << 6) | ((uint)promotion << 12) | ((uint)specialMove << 14);
+            Piece = piece;
+            From = from;
+            To = to;
+            PromotionType = promotion;
+            SpecialMove = specialMove;
         }
     }
 }
