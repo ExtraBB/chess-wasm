@@ -59,7 +59,7 @@ namespace ChessWasm.Models
         public const UInt64 LightSquares = 0x55AA55AA55AA55AA;
         public const UInt64 DarkSquares = 0xAA55AA55AA55AA55;
 
-`       // Track castling rights
+        // Track castling rights
         public bool WKingMoved { get; private set; } = false;
         public bool WRookRightMoved { get; private set; } = false;
         public bool WRookLeftMoved { get; private set; } = false;
@@ -132,8 +132,24 @@ namespace ChessWasm.Models
                     BKingMoved = true;
                     return;
                 }
-                case Piece.WPawn: WPawns = (WPawns ^ from) | to; return;
-                case Piece.BPawn: BPawns = (BPawns ^ from) | to; return;
+                case Piece.WPawn: 
+                {
+                    WPawns = (WPawns ^ from) | to; 
+                    if(move.SpecialMove == SpecialMove.EnPassant)
+                    {
+                        BPawns = BPawns.UnsetBit(move.To - 8);
+                    }
+                    return;
+                }
+                case Piece.BPawn: 
+                {
+                    BPawns = (BPawns ^ from) | to; 
+                    if(move.SpecialMove == SpecialMove.EnPassant)
+                    {
+                        WPawns = WPawns.UnsetBit(move.To + 8);
+                    }
+                    return;
+                }
             }
         }
 

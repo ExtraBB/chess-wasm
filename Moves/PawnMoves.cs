@@ -106,7 +106,7 @@ namespace ChessWasm.Moves
             }
 
             // En passant
-            if(lastMove != null && lastMove.From - lastMove.To == 16 && board.BPawns.NthBitSet((int)lastMove.To))
+            if(lastMove != null && lastMove.Piece == Piece.BPawn && lastMove.From - lastMove.To == 16 && board.BPawns.NthBitSet((int)lastMove.To))
             {
                 UInt64 possibleCapturerWest = ((UInt64)1 << ((int)lastMove.To - 1)) & board.WPawns & ~Board.AFile;
                 UInt64 possibleCapturerEast = ((UInt64)1 << ((int)lastMove.To + 1)) & board.WPawns & ~Board.HFile;
@@ -116,7 +116,7 @@ namespace ChessWasm.Moves
                     UInt64 destination = possibleCapturerWest << 9;
                     if((board.Empty & destination) == destination)
                     {
-                        moves.Add(new Move(Piece.WPawn, lastMove.To - 1, lastMove.To + 9, specialMove: SpecialMove.EnPassant));
+                        moves.Add(new Move(Piece.WPawn, lastMove.To - 1, lastMove.To + 8, specialMove: SpecialMove.EnPassant));
                     }
                }
 
@@ -125,7 +125,7 @@ namespace ChessWasm.Moves
                     UInt64 destination = possibleCapturerEast << 7;
                     if((board.Empty & destination) == destination)
                     {
-                        moves.Add(new Move(Piece.WPawn, lastMove.To + 1, lastMove.To + 7, specialMove: SpecialMove.EnPassant));
+                        moves.Add(new Move(Piece.WPawn, lastMove.To + 1, lastMove.To + 8, specialMove: SpecialMove.EnPassant));
                     }
                }
             }
@@ -154,7 +154,7 @@ namespace ChessWasm.Moves
             }
 
             // En passant
-            if(lastMove != null && lastMove.To - lastMove.From == 16 && board.WPawns.NthBitSet((int)lastMove.To))
+            if(lastMove != null && lastMove.Piece == Piece.WPawn && lastMove.To - lastMove.From == 16 && board.WPawns.NthBitSet((int)lastMove.To))
             {
                 UInt64 possibleCapturerWest = ((UInt64)1 << ((int)lastMove.To - 1)) & board.BPawns & ~Board.AFile;
                 UInt64 possibleCapturerEast = ((UInt64)1 << ((int)lastMove.To + 1)) & board.BPawns & ~Board.HFile;
@@ -164,7 +164,7 @@ namespace ChessWasm.Moves
                     UInt64 destination = possibleCapturerWest >> 7;
                     if((board.Empty & destination) == destination)
                     {
-                        moves.Add(new Move(Piece.BPawn, lastMove.To - 1, lastMove.To -7, specialMove: SpecialMove.EnPassant));
+                        moves.Add(new Move(Piece.BPawn, lastMove.To - 1, lastMove.To -8, specialMove: SpecialMove.EnPassant));
                     }
                }
 
@@ -173,7 +173,7 @@ namespace ChessWasm.Moves
                     UInt64 destination = possibleCapturerEast >> 9;
                     if((board.Empty & destination) == destination)
                     {
-                        moves.Add(new Move(Piece.BPawn, lastMove.To + 1, lastMove.To - 9, specialMove: SpecialMove.EnPassant));
+                        moves.Add(new Move(Piece.BPawn, lastMove.To + 1, lastMove.To - 8, specialMove: SpecialMove.EnPassant));
                     }
                }
             }

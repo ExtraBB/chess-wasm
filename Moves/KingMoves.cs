@@ -18,7 +18,7 @@ namespace ChessWasm.Moves
             }
             
             int position = board.WKing.GetLS1BIndex();
-            return MoveService.CreateMovesFromBitboard(KingMovesLookupTable[position] & ~board.WhitePieces, position, Piece.WKing).Concat(GetCastlingMoves(board, Piece.WKing);
+            return MoveService.CreateMovesFromBitboard(KingMovesLookupTable[position] & ~board.WhitePieces, position, Piece.WKing).Concat(GetCastlingMoves(board, Piece.WKing));
         }
 
         public static IEnumerable<Move> CalculateBKingMoves(Board board)
