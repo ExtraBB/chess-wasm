@@ -61,22 +61,28 @@ namespace ChessWasm.Moves
 
             if(piece == Piece.WKing && !board.WKingMoved)
             {
-                if(!board.WRookLeftMoved && !board.SquareIsInCheck(Square.B1, Piece.White) && !board.SquareIsInCheck(Square.C1, Piece.White) && !board.SquareIsInCheck(Square.D1, Piece.White))
+                bool emptyLeft = (0UL.SetBit((int)Square.B1).SetBit((int)Square.C1).SetBit((int)Square.D1) & board.Occupied) == 0;
+                if(emptyLeft && !board.WRookLeftMoved && !board.SquareIsInCheck(Square.B1, Piece.White) && !board.SquareIsInCheck(Square.C1, Piece.White) && !board.SquareIsInCheck(Square.D1, Piece.White))
                 {
                     moves.Add(new Move(Piece.WKing, Square.E1, Square.C1, specialMove: SpecialMove.Castling));
                 }
-                else if(!board.WRookRightMoved && !board.SquareIsInCheck(Square.E1, Piece.White) && !board.SquareIsInCheck(Square.F1, Piece.White) && !board.SquareIsInCheck(Square.G1, Piece.White))
+
+                bool emptyRight = (0UL.SetBit((int)Square.F1).SetBit((int)Square.G1) & board.Occupied) == 0;
+                if(emptyRight && !board.WRookRightMoved && !board.SquareIsInCheck(Square.E1, Piece.White) && !board.SquareIsInCheck(Square.F1, Piece.White) && !board.SquareIsInCheck(Square.G1, Piece.White))
                 {
                     moves.Add(new Move(Piece.WKing, Square.E1, Square.G1, specialMove: SpecialMove.Castling));
                 }
             }
             else if(piece == Piece.BKing && !board.BKingMoved)
             {
-                if(!board.BRookLeftMoved && !board.SquareIsInCheck(Square.B8, Piece.Black) && !board.SquareIsInCheck(Square.C8, Piece.Black) && !board.SquareIsInCheck(Square.D8, Piece.Black))
+                bool emptyLeft = (0UL.SetBit((int)Square.B8).SetBit((int)Square.C8).SetBit((int)Square.D8) & board.Occupied) == 0;
+                if(emptyLeft && !board.BRookLeftMoved && !board.SquareIsInCheck(Square.B8, Piece.Black) && !board.SquareIsInCheck(Square.C8, Piece.Black) && !board.SquareIsInCheck(Square.D8, Piece.Black))
                 {
                     moves.Add(new Move(Piece.BKing, Square.E8, Square.C8, specialMove: SpecialMove.Castling));
                 }
-                else if(!board.BRookRightMoved && !board.SquareIsInCheck(Square.E8, Piece.Black) && !board.SquareIsInCheck(Square.F8, Piece.Black) && !board.SquareIsInCheck(Square.G8, Piece.Black))
+
+                bool emptyRight = (0UL.SetBit((int)Square.F8).SetBit((int)Square.G8) & board.Occupied) == 0;
+                if(emptyRight && !board.BRookRightMoved && !board.SquareIsInCheck(Square.E8, Piece.Black) && !board.SquareIsInCheck(Square.F8, Piece.Black) && !board.SquareIsInCheck(Square.G8, Piece.Black))
                 {
                     moves.Add(new Move(Piece.BKing, Square.E8, Square.G8, specialMove: SpecialMove.Castling));
                 }

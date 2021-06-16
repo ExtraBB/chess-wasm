@@ -124,12 +124,34 @@ namespace ChessWasm.Models
                 {
                     WKing = (WKing ^ from) | to; 
                     WKingMoved = true;
+                    if(move.SpecialMove == SpecialMove.Castling)
+                    {
+                        if(move.To > move.From)
+                        {
+                            WRooks = WRooks.UnsetBit((int)Square.H1).SetBit((int)Square.F1);
+                        }
+                        else
+                        {
+                            WRooks = WRooks.UnsetBit((int)Square.A1).SetBit((int)Square.D1);
+                        }
+                    }
                     return;
                 }
                 case Piece.BKing: 
                 {
                     BKing = (BKing ^ from) | to; 
                     BKingMoved = true;
+                    if(move.SpecialMove == SpecialMove.Castling)
+                    {
+                        if(move.To > move.From)
+                        {
+                            BRooks = BRooks.UnsetBit((int)Square.H8).SetBit((int)Square.F8);
+                        }
+                        else
+                        {
+                            BRooks = BRooks.UnsetBit((int)Square.A8).SetBit((int)Square.D8);
+                        }
+                    }
                     return;
                 }
                 case Piece.WPawn: 
