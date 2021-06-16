@@ -89,8 +89,8 @@ namespace ChessWasm.Moves
         {
             List<Move> moves = new List<Move>(16);
 
-            UInt64 capturesWest = (board.WPawns << 7) & ~Board.AFile & board.BlackPieces;
-            UInt64 capturesEast = (board.WPawns << 9) & ~Board.HFile & board.BlackPieces;
+            UInt64 capturesWest = ((board.WPawns & ~Board.AFile) << 7) & board.BlackPieces;
+            UInt64 capturesEast = ((board.WPawns & ~Board.HFile) << 9) & board.BlackPieces;
 
             for(int i = 0; i < 64; i++)
             {
@@ -137,8 +137,8 @@ namespace ChessWasm.Moves
         {
             List<Move> moves = new List<Move>(16);
 
-            UInt64 capturesWest = (board.BPawns >> 9) & ~Board.AFile & board.WhitePieces;
-            UInt64 capturesEast = (board.BPawns >> 7) & ~Board.FFile & board.WhitePieces;
+            UInt64 capturesWest = ((board.BPawns & ~Board.AFile) >> 9) & board.WhitePieces;
+            UInt64 capturesEast = ((board.BPawns & ~Board.FFile) >> 7) & board.WhitePieces;
 
             for(int i = 0; i < 64; i++)
             {
@@ -179,6 +179,20 @@ namespace ChessWasm.Moves
             }
 
             return moves;
+        }
+
+        public static UInt64 GetWPawnAttackMap(Board board)
+        {
+            UInt64 capturesWest = ((board.WPawns & ~Board.AFile) << 7) & ~board.WhitePieces;
+            UInt64 capturesEast = ((board.WPawns & ~Board.HFile) << 9) & ~board.WhitePieces;
+            return capturesWest | capturesEast;
+        }
+
+        public static UInt64 GetBPawnAttackMap(Board board)
+        {
+            UInt64 capturesWest = ((board.BPawns & ~Board.AFile) >> 9) & ~board.BlackPieces;
+            UInt64 capturesEast = ((board.BPawns & ~Board.FFile) >> 7) & ~board.BlackPieces;
+            return capturesWest | capturesEast;
         }
     }
 }

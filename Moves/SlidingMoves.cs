@@ -107,5 +107,46 @@ namespace ChessWasm.Moves
 
             return moves;
         }
+
+        public static UInt64 GetBishopAttackMap(UInt64 bishops, UInt64 occupied, UInt64 ownPieces)
+        {
+            UInt64 allAttacks = 0;
+            for(int i = 0; i < 64; i++)
+            {
+                if(bishops.NthBitSet(i))
+                {
+                    allAttacks |= MagicService.GetBishopAttacks(occupied, i) & ~ownPieces;
+                }
+            }
+            return allAttacks;
+        }
+
+        public static UInt64 GetRookAttackMap(UInt64 rooks, UInt64 occupied, UInt64 ownPieces)
+        {
+            UInt64 allAttacks = 0;
+            for(int i = 0; i < 64; i++)
+            {
+                if(rooks.NthBitSet(i))
+                {
+                    allAttacks |= MagicService.GetRookAttacks(occupied, i) & ~ownPieces;
+                }
+            }
+            return allAttacks;
+        }
+
+        public static UInt64 GetQueenAttackMap(UInt64 queen, UInt64 occupied, UInt64 ownPieces)
+        {
+            UInt64 allAttacks = 0;
+            for(int i = 0; i < 64; i++)
+            {
+                if(queen.NthBitSet(i))
+                {
+                    allAttacks |= MagicService.GetRookAttacks(occupied, i) & ~ownPieces;
+                    allAttacks |= MagicService.GetBishopAttacks(occupied, i) & ~ownPieces;
+                    break;
+                }
+            }
+            return allAttacks;
+        }
     }
 }

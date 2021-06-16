@@ -1,4 +1,5 @@
 using System;
+using ChessWasm.Moves;
 
 namespace ChessWasm.Models
 {
@@ -26,6 +27,23 @@ namespace ChessWasm.Models
         public UInt64 BlackPieces { get => BRooks | BKnights | BBishops | BKing | BQueen | BPawns; }
         public UInt64 Empty { get => ~(WhitePieces | BlackPieces); }
         public UInt64 Occupied { get => WhitePieces | BlackPieces; }
+
+        // Attacks
+        public UInt64 WRookAttacks { get => SlidingMoves.GetRookAttackMap(WRooks, Occupied, WhitePieces); set { } }
+        public UInt64 BRookAttacks { get => SlidingMoves.GetRookAttackMap(BRooks, Occupied, BlackPieces); set { } }
+        public UInt64 WBishopAttacks { get => SlidingMoves.GetBishopAttackMap(WBishops, Occupied, WhitePieces); set { } }
+        public UInt64 BBishopAttacks { get => SlidingMoves.GetBishopAttackMap(BBishops, Occupied, BlackPieces); set { } }
+        public UInt64 WQueenAttacks { get => SlidingMoves.GetQueenAttackMap(WQueen, Occupied, WhitePieces); set { } }
+        public UInt64 BQueenAttacks { get => SlidingMoves.GetQueenAttackMap(BQueen, Occupied, BlackPieces); set { } }
+        public UInt64 WPawnAttacks { get => PawnMoves.GetWPawnAttackMap(this); set { } }
+        public UInt64 BPawnAttacks { get => PawnMoves.GetBPawnAttackMap(this); set { } }
+        public UInt64 WKnightAttacks { get => KnightMoves.GetKnightsAttackMap(WKnights, WhitePieces); set { } }
+        public UInt64 BKnightAttacks { get => KnightMoves.GetKnightsAttackMap(BKnights, BlackPieces); set { } }
+        public UInt64 WKingAttacks { get => KingMoves.GetKingAttackMap(WKing, WhitePieces); set { } }
+        public UInt64 BKingAttacks { get => KingMoves.GetKingAttackMap(BKing, BlackPieces); set { } }
+
+        public UInt64 AllWAttacks { get => WRookAttacks | WBishopAttacks | WQueenAttacks | WPawnAttacks | WKingAttacks | WKingAttacks; }
+        public UInt64 AllBAttacks { get => BRookAttacks | BBishopAttacks | BQueenAttacks | BPawnAttacks | BKingAttacks | BKingAttacks; }
 
         /*
         *  Constants
@@ -197,10 +215,23 @@ namespace ChessWasm.Models
             }
         }
 
-        public bool SquareIsInCheck(Square square, Piece playerPossibleInCheck)
+        public Board PreviewMove(Move move)
         {
-            // TODO
-            return false;
+            Board copy = this.MemberwiseClone() as Board;
+            copy.MakeMove(move);
+            return copy;
+        }
+
+        public bool SquareIsInCheck(Square square, Player playerPossibleInCheck)
+        {
+            return SquareIsInCheck(0UL.SetBit((int)square), playerPossibleInCheck);
+        }
+
+        public bool SquareIsInCheck(UInt64 square, Player playerPossibleInCheck)
+        {
+            return playerPossibleInCheck == Player.White
+                ? (square & AllBAttacks) != 0
+                : (square & AllWAttacks) != 0;
         }
     }
 }

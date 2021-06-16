@@ -52,6 +52,24 @@ namespace ChessWasm.Moves
             return moves;
         }
 
+        public static UInt64 GetKnightsAttackMap(UInt64 knights, UInt64 ownPieces)
+        {
+            if(KnightMovesLookupTable == null)
+            {
+                GenerateKnightMoves();
+            }
+
+            UInt64 allAttacks = 0;
+            for(int i = 0; i < 64; i++)
+            {
+                if(knights.NthBitSet(i))
+                {
+                    allAttacks |= KnightMovesLookupTable[i] & ~ownPieces;
+                }
+            }
+            return allAttacks;
+        }
+
         private static void GenerateKnightMoves()
         {
             KnightMovesLookupTable = new UInt64[64];

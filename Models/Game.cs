@@ -20,7 +20,7 @@ namespace ChessWasm.Models
 
         public void MakeMove(Move move) 
         {
-            if(MoveService.IsLegalMove(Board, move)) 
+            if(MoveService.IsLegalMove(Board, move, CurrentPlayer)) 
             {
                 Board.MakeMove(move);
                 CurrentPlayer = (Player)(-(int)CurrentPlayer);
