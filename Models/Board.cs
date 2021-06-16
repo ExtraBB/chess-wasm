@@ -2,7 +2,7 @@ using System;
 
 namespace ChessWasm.Models
 {
-    public enum Squares {
+    public enum Square {
         A1, B1, C1, D1, E1, F1, G1, H1,
         A2, B2, C2, D2, E2, F2, G2, H2,
         A3, B3, C3, D3, E3, F3, G3, H3,
@@ -59,6 +59,14 @@ namespace ChessWasm.Models
         public const UInt64 LightSquares = 0x55AA55AA55AA55AA;
         public const UInt64 DarkSquares = 0xAA55AA55AA55AA55;
 
+`       // Track castling rights
+        public bool WKingMoved { get; private set; } = false;
+        public bool WRookRightMoved { get; private set; } = false;
+        public bool WRookLeftMoved { get; private set; } = false;
+        public bool BKingMoved { get; private set; } = false;
+        public bool BRookRightMoved { get; private set; } = false;
+        public bool BRookLeftMoved { get; private set; } = false;
+
         public void MakeMove(Move move) 
         {
             // Clear to square
@@ -80,19 +88,59 @@ namespace ChessWasm.Models
             UInt64 to = 1UL << move.To;
             switch(move.Piece)
             {
-                case Piece.WRook: WRooks = (WRooks ^ from) | to; return;
-                case Piece.BRook: BRooks = (BRooks ^ from) | to; return;
+                case Piece.WRook: 
+                {
+                    WRooks = (WRooks ^ from) | to; 
+                    if(move.From == 0)
+                    {
+                        WRookLeftMoved = true;
+                    } 
+                    else if (move.From == 7)
+                    {
+                        WRookRightMoved = true;
+                    }
+                    return;
+                }
+                case Piece.BRook: 
+                {
+                    BRooks = (BRooks ^ from) | to; 
+                    if(move.From == 56)
+                    {
+                        BRookLeftMoved = true;
+                    } 
+                    else if (move.From == 63)
+                    {
+                        BRookRightMoved = true;
+                    }
+                    return;
+                }
                 case Piece.WKnight: WKnights = (WKnights ^ from) | to; return;
                 case Piece.BKnight: BKnights = (BKnights ^ from) | to; return;
                 case Piece.WBishop: WBishops = (WBishops ^ from) | to; return;
                 case Piece.BBishop: BBishops = (BBishops ^ from) | to; return;
                 case Piece.WQueen: WQueen = (WQueen ^ from) | to; return;
                 case Piece.BQueen: BQueen = (BQueen ^ from) | to; return;
-                case Piece.WKing: WKing = (WKing ^ from) | to; return;
-                case Piece.BKing: BKing = (BKing ^ from) | to; return;
+                case Piece.WKing: 
+                {
+                    WKing = (WKing ^ from) | to; 
+                    WKingMoved = true;
+                    return;
+                }
+                case Piece.BKing: 
+                {
+                    BKing = (BKing ^ from) | to; 
+                    BKingMoved = true;
+                    return;
+                }
                 case Piece.WPawn: WPawns = (WPawns ^ from) | to; return;
                 case Piece.BPawn: BPawns = (BPawns ^ from) | to; return;
             }
+        }
+
+        public bool SquareIsInCheck(Square square, Piece playerPossibleInCheck)
+        {
+            // TODO
+            return false;
         }
     }
 }

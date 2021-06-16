@@ -39,5 +39,14 @@ namespace ChessWasm.Models
             PromotionType = promotion;
             SpecialMove = specialMove;
         }
+
+        public Move(Piece piece, Square from, Square to, PromotionType promotion = PromotionType.Queen, SpecialMove specialMove = SpecialMove.None)
+        {
+            Piece = piece;
+            From = (int)from;
+            To = (int)to;
+            PromotionType = promotion;
+            SpecialMove = specialMove;
+        }
     }
 }

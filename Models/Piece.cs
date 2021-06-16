@@ -15,6 +15,8 @@ namespace ChessWasm.Models
         WQueen,
         BQueen,
         WKing,
-        BKing
+        BKing,
+        White,
+        Black
     }
 }
