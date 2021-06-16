@@ -29,14 +29,18 @@ namespace ChessWasm.Services
                 return PawnMoves.CalculateBPawnMoves(board, lastMove)
                     .Concat(SlidingMoves.CalculateBBishopMoves(board))
                     .Concat(SlidingMoves.CalculateBRookMoves(board))
-                    .Concat(SlidingMoves.CalculateBQueenMoves(board));
+                    .Concat(SlidingMoves.CalculateBQueenMoves(board))
+                    .Concat(KingMoves.CalculateBKingMoves(board))
+                    .Concat(KnightMoves.CalculateBKnightMoves(board));
             }
             else if (player == Player.White)
             {
                 return PawnMoves.CalculateWPawnMoves(board, lastMove)
                     .Concat(SlidingMoves.CalculateWBishopMoves(board))
                     .Concat(SlidingMoves.CalculateWRookMoves(board))
-                    .Concat(SlidingMoves.CalculateWQueenMoves(board));
+                    .Concat(SlidingMoves.CalculateWQueenMoves(board))
+                    .Concat(KingMoves.CalculateWKingMoves(board))
+                    .Concat(KnightMoves.CalculateWKnightMoves(board));
             }
             return null;
         }

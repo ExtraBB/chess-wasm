@@ -34,11 +34,11 @@ namespace ChessWasm.Models
         // Files
         public const UInt64 AFile = 0x0101010101010101;
         public const UInt64 BFile = 0x0202020202020202;
-        public const UInt64 CFile = 0x0303030303030303;
-        public const UInt64 DFile = 0x0404040404040404;
-        public const UInt64 EFile = 0x0505050505050505;
-        public const UInt64 FFile = 0x0606060606060606;
-        public const UInt64 GFile = 0x0707070707070707;
+        public const UInt64 CFile = 0x0404040404040404;
+        public const UInt64 DFile = 0x0808080808080808;
+        public const UInt64 EFile = 0x1010101010101010;
+        public const UInt64 FFile = 0x2020202020202020;
+        public const UInt64 GFile = 0x4040404040404040;
         public const UInt64 HFile = 0x8080808080808080;
 
         // Ranks
@@ -61,7 +61,6 @@ namespace ChessWasm.Models
 
         public void MakeMove(Move move) 
         {
-
             // Clear to square
             WRooks = WRooks.UnsetBit(move.To);
             BRooks = BRooks.UnsetBit(move.To);
