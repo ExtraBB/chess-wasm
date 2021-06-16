@@ -139,6 +139,17 @@ namespace ChessWasm.Models
                     {
                         BPawns = BPawns.UnsetBit(move.To - 8);
                     }
+                    else if (move.SpecialMove == SpecialMove.Promotion)
+                    {
+                        WPawns = WPawns.UnsetBit(move.To);
+                        switch(move.PromotionType)
+                        {
+                            case PromotionType.Queen: WQueen = WQueen.SetBit(move.To); break;
+                            case PromotionType.Knight: WKnights = WKnights.SetBit(move.To); break;
+                            case PromotionType.Bishop: WBishops = WBishops.SetBit(move.To); break;
+                            case PromotionType.Rook: WRooks = WRooks.SetBit(move.To); break;
+                        }
+                    }
                     return;
                 }
                 case Piece.BPawn: 
@@ -147,6 +158,17 @@ namespace ChessWasm.Models
                     if(move.SpecialMove == SpecialMove.EnPassant)
                     {
                         WPawns = WPawns.UnsetBit(move.To + 8);
+                    }
+                    else if (move.SpecialMove == SpecialMove.Promotion)
+                    {
+                        BPawns = BPawns.UnsetBit(move.To);
+                        switch(move.PromotionType)
+                        {
+                            case PromotionType.Queen: BQueen = BQueen.SetBit(move.To); break;
+                            case PromotionType.Knight: BKnights = BKnights.SetBit(move.To); break;
+                            case PromotionType.Bishop: BBishops = BBishops.SetBit(move.To); break;
+                            case PromotionType.Rook: BRooks = BRooks.SetBit(move.To); break;
+                        }
                     }
                     return;
                 }

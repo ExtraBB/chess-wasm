@@ -6,6 +6,15 @@
 {
     <div class="winner-text">@(winnerText)</div>
 }
+@if(promotionMoves.Count > 0)
+{
+    <div class="promotionOptions">
+        <button class="btn btn-primary" @onclick="(() => Promote(PromotionType.Queen))">Queen</button>
+        <button class="btn btn-primary" @onclick="(() => Promote(PromotionType.Knight))">Knight</button>
+        <button class="btn btn-primary" @onclick="(() => Promote(PromotionType.Bishop))">Bishop</button>
+        <button class="btn btn-primary" @onclick="(() => Promote(PromotionType.Rook))">Rook</button>
+    </div>
+}
 <div class="board">
     @for(int row = 7; row >= 0; row--)
     {
@@ -30,6 +39,8 @@
 @code {
     private int highlightedPosition = -1;
     private string winnerText = null;
+
+    private List<Move> promotionMoves = new List<Move>();
 
     public ChessBoard() 
     {
@@ -63,28 +74,50 @@
         return movesFromSquare.Any(move => move.To == position);
     }
 
+    private void Promote(PromotionType type)
+    {
+        var move = promotionMoves.First(m => m.PromotionType == type);
+        GameService.TryMakeMove(move);
+        if(GameService.CurrentGame.Winner != 0)
+        {
+            winnerText = $"{GameService.CurrentGame.Winner.ToString()} has won!";
+            GameService.ClearGame();
+            this.StateHasChanged();
+        }
+        highlightedPosition = -1;
+        promotionMoves = new List<Move>();
+    }
+
     private void SquareClicked(int newPosition) 
     {
         if(GameService.CurrentGame == null)
         {
             return;
         }
+        promotionMoves = new List<Move>();
 
         var movesFromSquare = GameService.CurrentGame.PossibleMoves.Where(move => move.From == highlightedPosition);
         if(movesFromSquare.Any()) 
         {
-            Move move = movesFromSquare.FirstOrDefault(move => move.To == newPosition);
-            if(move != null) 
+            IEnumerable<Move> moves = movesFromSquare.Where(move => move.To == newPosition);
+            if(moves.Any()) 
             {
-                GameService.TryMakeMove(move);
-                if(GameService.CurrentGame.Winner != 0)
+                if(moves.Count() > 1)
                 {
-                    winnerText = $"{GameService.CurrentGame.Winner.ToString()} has won!";
-                    GameService.ClearGame();
-                    this.StateHasChanged();
+                    promotionMoves = moves.ToList();
                 }
-                highlightedPosition = -1;
-                return;
+                else
+                {
+                    GameService.TryMakeMove(moves.First());
+                    if(GameService.CurrentGame.Winner != 0)
+                    {
+                        winnerText = $"{GameService.CurrentGame.Winner.ToString()} has won!";
+                        GameService.ClearGame();
+                        this.StateHasChanged();
+                    }
+                    highlightedPosition = -1;
+                    return;
+                }
             }
         }
 
