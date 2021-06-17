@@ -55,5 +55,23 @@ namespace ChessWasm.Services
                 : !copy.SquareIsInCheck(copy.BKing, player);
 
         }
+
+        public static ulong Perft(Board board, int max_depth, Move lastMove = null, Player player = Player.White, int depth = 0)
+        {
+            if(depth < max_depth)
+            {
+                var moves = GetAllPossibleMoves(board, player, null);
+                var nextPlayer = player == Player.White ? Player.Black : Player.White;
+
+                ulong total = 0;
+                foreach(var nextTotal in moves.Select(m => Perft(board.PreviewMove(m), max_depth, m, nextPlayer, depth + 1)))
+                {
+                    total += nextTotal;
+                }
+                return total;
+            }
+
+            return 1;
+        }
     }
 }

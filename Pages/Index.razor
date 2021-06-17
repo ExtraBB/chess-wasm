@@ -3,9 +3,16 @@
 @using ChessWasm.Models;
 @using ChessWasm.Services;
 @using ChessWasm.Shared;
+@using System.Diagnostics
 
 <div class="main">
-    <button class="btn btn-success btn-start" @onclick="StartGame">New Game</button>
+    <div>
+        <button class="btn btn-success btn-start" @onclick="StartGame">New Game</button>
+        <button class="btn btn-primary btn-start" @onclick="StartPerft">Perft</button>
+        <div class="status-box">
+            <code>@((MarkupString)statusText)</code>
+        </div>
+    </div>
 
     <div class="boards">
         <div class="main-board">
@@ -30,13 +37,51 @@
 
 @code {
     Board board = new Board();
+    string statusText = "";
+
     private void StartGame()
     {
+        ResetStatusText();
+        AppendStatusText("Initializing Game <br />");
         GameService.StartGame();
         board = GameService.CurrentGame.Board;
         GameService.BoardChanged += UpdateBoard;
+
+        AppendStatusText("Initializing Move tables <br />");
         MagicService.Initialize();
+
+        AppendStatusText("Game started <br />");
         this.StateHasChanged();
+    }
+
+    private void AppendStatusText(string text)
+    {
+        statusText += text;
+        StateHasChanged();
+    }
+
+    private void ResetStatusText()
+    {
+        statusText = "";
+        StateHasChanged();
+    }
+
+    private async void StartPerft()
+    {
+        ResetStatusText();
+        AppendStatusText("Initializing Perft <br />");
+        MagicService.Initialize();
+
+        AppendStatusText("Initializing Move tables <br />");
+
+        Stopwatch watch = new Stopwatch();
+        for(int i = 1; i < 6; i++)
+        {
+            watch.Restart();
+            var perft = MoveService.Perft(new Board(), i);
+            AppendStatusText($"Perft at depth {i} is: {perft} (Elapsed: {watch.Elapsed.Seconds} seconds) <br />");
+            await Task.Delay(1);
+        }
     }
 
     private void UpdateBoard(Board board)

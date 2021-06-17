@@ -33,3 +33,11 @@
 .bitboards ::deep > *:nth-child(even) {
     margin-right: 32px;
 }
+
+.status-box {
+    text-align: center;
+    border: 1px solid gray;
+    min-height: 48px;
+    width: 512px;
+    margin: 16px auto;
+}

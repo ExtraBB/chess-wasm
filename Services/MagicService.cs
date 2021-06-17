@@ -11,6 +11,7 @@ namespace ChessWasm.Services
 
     public static class MagicService
     {
+        private static bool initialized = false;
         private static UInt64[,] BishopAttacks = new UInt64[64, 512];
         private static UInt64[,] RookAttacks  = new UInt64[64, 4096];
         private static UInt64[] BishopMasks = new UInt64[64];
@@ -191,10 +192,14 @@ namespace ChessWasm.Services
         
         public static void Initialize()
         {
-            Console.WriteLine("Initializing Bishop attacks");
-            InitializeSlidersAttacks(true);
-            Console.WriteLine("Initializing Rook attacks");
-            InitializeSlidersAttacks(false);
+            if(!initialized)
+            {
+                Console.WriteLine("Initializing Bishop attacks");
+                InitializeSlidersAttacks(true);
+                Console.WriteLine("Initializing Rook attacks");
+                InitializeSlidersAttacks(false);
+                initialized = true;
+            }
         }
 
         private static void InitializeSlidersAttacks(bool isBishop)
