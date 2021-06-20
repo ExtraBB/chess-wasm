@@ -60,7 +60,7 @@ namespace ChessWasm.Services
         {
             if(depth < max_depth)
             {
-                var moves = GetAllPossibleMoves(board, player, null);
+                var moves = GetAllPossibleMoves(board, player, lastMove);
                 var nextPlayer = player == Player.White ? Player.Black : Player.White;
 
                 ulong total = 0;

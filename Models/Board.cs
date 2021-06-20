@@ -14,6 +14,12 @@ namespace ChessWasm.Models
         A8, B8, C8, D8, E8, F8, G8, H8,
     }
 
+    public enum InitialSetup
+    {
+        Regular,
+        Kiwipete
+    }
+
     public class Board
     {
         public UInt64 WRooks = 0x81, BRooks = 0x8100000000000000;
@@ -42,8 +48,8 @@ namespace ChessWasm.Models
         public UInt64 WKingAttacks { get => KingMoves.GetKingAttackMap(WKing, WhitePieces); set { } }
         public UInt64 BKingAttacks { get => KingMoves.GetKingAttackMap(BKing, BlackPieces); set { } }
 
-        public UInt64 AllWAttacks { get => WRookAttacks | WBishopAttacks | WQueenAttacks | WPawnAttacks | WKingAttacks | WKingAttacks; }
-        public UInt64 AllBAttacks { get => BRookAttacks | BBishopAttacks | BQueenAttacks | BPawnAttacks | BKingAttacks | BKingAttacks; }
+        public UInt64 AllWAttacks { get => WRookAttacks | WBishopAttacks | WQueenAttacks | WPawnAttacks | WKingAttacks | WKnightAttacks; }
+        public UInt64 AllBAttacks { get => BRookAttacks | BBishopAttacks | BQueenAttacks | BPawnAttacks | BKingAttacks | BKnightAttacks; }
 
         /*
         *  Constants
@@ -84,6 +90,21 @@ namespace ChessWasm.Models
         public bool BKingMoved { get; private set; } = false;
         public bool BRookRightMoved { get; private set; } = false;
         public bool BRookLeftMoved { get; private set; } = false;
+
+        public Board(InitialSetup setup = InitialSetup.Regular)
+        {
+            if(setup == InitialSetup.Kiwipete)
+            {
+                BPawns = 0UL.SetBit((int)Square.A7).SetBit((int)Square.B4).SetBit((int)Square.C7).SetBit((int)Square.D7).SetBit((int)Square.E6).SetBit((int)Square.F7).SetBit((int)Square.G6).SetBit((int)Square.H3);
+                BBishops = 0UL.SetBit((int)Square.A6).SetBit((int)Square.G7);
+                BKnights = 0UL.SetBit((int)Square.B6).SetBit((int)Square.F6);
+                BQueen = 0UL.SetBit((int)Square.E7);
+                WPawns = 0UL.SetBit((int)Square.A2).SetBit((int)Square.B2).SetBit((int)Square.C2).SetBit((int)Square.D5).SetBit((int)Square.E4).SetBit((int)Square.F2).SetBit((int)Square.G2).SetBit((int)Square.H2);
+                WBishops = 0UL.SetBit((int)Square.D2).SetBit((int)Square.E2);
+                WKnights = 0UL.SetBit((int)Square.C3).SetBit((int)Square.E5);
+                WQueen = 0UL.SetBit((int)Square.F3);
+            }
+        }
 
         public void MakeMove(Move move) 
         {

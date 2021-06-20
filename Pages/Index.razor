@@ -75,7 +75,7 @@
         AppendStatusText("Initializing Move tables <br />");
 
         Stopwatch watch = new Stopwatch();
-        for(int i = 1; i < 6; i++)
+        for(int i = 1; i < 5; i++)
         {
             watch.Restart();
             var perft = MoveService.Perft(new Board(), i);
