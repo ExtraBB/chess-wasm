@@ -96,12 +96,32 @@ namespace ChessWasm.Moves
             {
                 if(capturesWest.NthBitSet(i))
                 {
-                    moves.Add(new Move(Piece.WPawn, i - 7, i));
+                    if(i >= 56)
+                    {
+                        moves.Add(new Move(Piece.WPawn, i - 7, i, PromotionType.Queen, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.WPawn, i - 7, i, PromotionType.Knight, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.WPawn, i - 7, i, PromotionType.Rook, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.WPawn, i - 7, i, PromotionType.Bishop, SpecialMove.Promotion));
+                    }
+                    else
+                    {
+                        moves.Add(new Move(Piece.WPawn, i - 7, i));
+                    }
                 }
 
                 if(capturesEast.NthBitSet(i))
                 {
-                    moves.Add(new Move(Piece.WPawn, i - 9, i));
+                    if(i >= 56)
+                    {
+                        moves.Add(new Move(Piece.WPawn, i - 9, i, PromotionType.Queen, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.WPawn, i - 9, i, PromotionType.Knight, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.WPawn, i - 9, i, PromotionType.Rook, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.WPawn, i - 9, i, PromotionType.Bishop, SpecialMove.Promotion));
+                    }
+                    else
+                    {
+                        moves.Add(new Move(Piece.WPawn, i - 9, i));
+                    }
                 }
             }
 
@@ -144,12 +164,32 @@ namespace ChessWasm.Moves
             {
                 if(capturesWest.NthBitSet(i))
                 {
-                    moves.Add(new Move(Piece.BPawn, i + 9, i));
+                    if(i < 8)
+                    {
+                        moves.Add(new Move(Piece.BPawn, i + 9, i, PromotionType.Queen, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.BPawn, i + 9, i, PromotionType.Knight, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.BPawn, i + 9, i, PromotionType.Rook, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.BPawn, i + 9, i, PromotionType.Bishop, SpecialMove.Promotion));
+                    }
+                    else
+                    {
+                        moves.Add(new Move(Piece.BPawn, i + 9, i));
+                    }
                 }
 
                 if(capturesEast.NthBitSet(i))
                 {
-                    moves.Add(new Move(Piece.BPawn, i + 7, i));
+                    if(i < 8)
+                    {
+                        moves.Add(new Move(Piece.BPawn, i + 7, i, PromotionType.Queen, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.BPawn, i + 7, i, PromotionType.Knight, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.BPawn, i + 7, i, PromotionType.Rook, SpecialMove.Promotion));
+                        moves.Add(new Move(Piece.BPawn, i + 7, i, PromotionType.Bishop, SpecialMove.Promotion));
+                    }
+                    else
+                    {
+                        moves.Add(new Move(Piece.BPawn, i + 7, i));
+                    }
                 }
             }
 
