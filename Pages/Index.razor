@@ -9,6 +9,7 @@
     <div>
         <button class="btn btn-success btn-start" @onclick="StartGame">New Game</button>
         <button class="btn btn-primary btn-start" @onclick="StartPerft">Perft</button>
+        <button class="btn btn-primary btn-start" @onclick="StartPerftDivide">Perft Divide</button>
         <div class="status-box">
             <code>@((MarkupString)statusText)</code>
         </div>
@@ -80,6 +81,28 @@
             watch.Restart();
             var perft = MoveService.Perft(new Board(), i);
             AppendStatusText($"Perft at depth {i} is: {perft} (Elapsed: {watch.Elapsed.Seconds} seconds) <br />");
+            await Task.Delay(1);
+        }
+    }
+    private async void StartPerftDivide()
+    {
+        ResetStatusText();
+        AppendStatusText("Initializing Perft <br />");
+        MagicService.Initialize();
+
+        AppendStatusText("Initializing Move tables <br />");
+
+        int depth = 4;
+        Board b = new Board();
+        var moves = MoveService.GetAllPossibleMoves(b, Player.White, null);
+        foreach(Move m in moves)
+        {
+            var newBoard = b.PreviewMove(m);
+            var perft = MoveService.Perft(newBoard, depth, m, player: Player.Black, depth: 1);
+            if(perft != 0)
+            {
+                AppendStatusText($"{(Square)m.From}{(Square)m.To}: {perft} (depth {depth}) <br />");
+            }
             await Task.Delay(1);
         }
     }

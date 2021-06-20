@@ -37,7 +37,8 @@
 .status-box {
     text-align: center;
     border: 1px solid gray;
-    min-height: 48px;
+    height: 128px;
+    overflow: auto;
     width: 512px;
     margin: 16px auto;
 }

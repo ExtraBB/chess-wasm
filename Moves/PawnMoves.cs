@@ -108,8 +108,8 @@ namespace ChessWasm.Moves
             // En passant
             if(lastMove != null && lastMove.Piece == Piece.BPawn && lastMove.From - lastMove.To == 16 && board.BPawns.NthBitSet((int)lastMove.To))
             {
-                UInt64 possibleCapturerWest = ((UInt64)1 << ((int)lastMove.To - 1)) & board.WPawns & ~Board.AFile;
-                UInt64 possibleCapturerEast = ((UInt64)1 << ((int)lastMove.To + 1)) & board.WPawns & ~Board.HFile;
+                UInt64 possibleCapturerWest = ((UInt64)1 << ((int)lastMove.To - 1)) & board.WPawns & ~Board.HFile;
+                UInt64 possibleCapturerEast = ((UInt64)1 << ((int)lastMove.To + 1)) & board.WPawns & ~Board.AFile;
                
                if(possibleCapturerWest != 0)
                {
@@ -138,7 +138,7 @@ namespace ChessWasm.Moves
             List<Move> moves = new List<Move>(16);
 
             UInt64 capturesWest = ((board.BPawns & ~Board.AFile) >> 9) & board.WhitePieces;
-            UInt64 capturesEast = ((board.BPawns & ~Board.FFile) >> 7) & board.WhitePieces;
+            UInt64 capturesEast = ((board.BPawns & ~Board.HFile) >> 7) & board.WhitePieces;
 
             for(int i = 0; i < 64; i++)
             {
@@ -156,8 +156,8 @@ namespace ChessWasm.Moves
             // En passant
             if(lastMove != null && lastMove.Piece == Piece.WPawn && lastMove.To - lastMove.From == 16 && board.WPawns.NthBitSet((int)lastMove.To))
             {
-                UInt64 possibleCapturerWest = ((UInt64)1 << ((int)lastMove.To - 1)) & board.BPawns & ~Board.AFile;
-                UInt64 possibleCapturerEast = ((UInt64)1 << ((int)lastMove.To + 1)) & board.BPawns & ~Board.HFile;
+                UInt64 possibleCapturerWest = ((UInt64)1 << ((int)lastMove.To - 1)) & board.BPawns & ~Board.HFile;
+                UInt64 possibleCapturerEast = ((UInt64)1 << ((int)lastMove.To + 1)) & board.BPawns & ~Board.AFile;
                
                if(possibleCapturerWest != 0)
                {
@@ -191,7 +191,7 @@ namespace ChessWasm.Moves
         public static UInt64 GetBPawnAttackMap(Board board)
         {
             UInt64 capturesWest = ((board.BPawns & ~Board.AFile) >> 9) & ~board.BlackPieces;
-            UInt64 capturesEast = ((board.BPawns & ~Board.FFile) >> 7) & ~board.BlackPieces;
+            UInt64 capturesEast = ((board.BPawns & ~Board.HFile) >> 7) & ~board.BlackPieces;
             return capturesWest | capturesEast;
         }
     }

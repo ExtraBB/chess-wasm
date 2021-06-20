@@ -17,7 +17,8 @@ namespace ChessWasm.Models
     public enum InitialSetup
     {
         Regular,
-        Kiwipete
+        Kiwipete,
+        Position3
     }
 
     public class Board
@@ -91,18 +92,39 @@ namespace ChessWasm.Models
         public bool BRookRightMoved { get; private set; } = false;
         public bool BRookLeftMoved { get; private set; } = false;
 
-        public Board(InitialSetup setup = InitialSetup.Regular)
+        public Board(InitialSetup setup = InitialSetup.Kiwipete)
         {
-            if(setup == InitialSetup.Kiwipete)
+            switch(setup)
             {
-                BPawns = 0UL.SetBit((int)Square.A7).SetBit((int)Square.B4).SetBit((int)Square.C7).SetBit((int)Square.D7).SetBit((int)Square.E6).SetBit((int)Square.F7).SetBit((int)Square.G6).SetBit((int)Square.H3);
-                BBishops = 0UL.SetBit((int)Square.A6).SetBit((int)Square.G7);
-                BKnights = 0UL.SetBit((int)Square.B6).SetBit((int)Square.F6);
-                BQueen = 0UL.SetBit((int)Square.E7);
-                WPawns = 0UL.SetBit((int)Square.A2).SetBit((int)Square.B2).SetBit((int)Square.C2).SetBit((int)Square.D5).SetBit((int)Square.E4).SetBit((int)Square.F2).SetBit((int)Square.G2).SetBit((int)Square.H2);
-                WBishops = 0UL.SetBit((int)Square.D2).SetBit((int)Square.E2);
-                WKnights = 0UL.SetBit((int)Square.C3).SetBit((int)Square.E5);
-                WQueen = 0UL.SetBit((int)Square.F3);
+                case InitialSetup.Kiwipete:
+                {
+                    BPawns = 0UL.SetBit((int)Square.A7).SetBit((int)Square.B4).SetBit((int)Square.C7).SetBit((int)Square.D7).SetBit((int)Square.E6).SetBit((int)Square.F7).SetBit((int)Square.G6).SetBit((int)Square.H3);
+                    BBishops = 0UL.SetBit((int)Square.A6).SetBit((int)Square.G7);
+                    BKnights = 0UL.SetBit((int)Square.B6).SetBit((int)Square.F6);
+                    BQueen = 0UL.SetBit((int)Square.E7);
+                    WPawns = 0UL.SetBit((int)Square.A2).SetBit((int)Square.B2).SetBit((int)Square.C2).SetBit((int)Square.D5).SetBit((int)Square.E4).SetBit((int)Square.F2).SetBit((int)Square.G2).SetBit((int)Square.H2);
+                    WBishops = 0UL.SetBit((int)Square.D2).SetBit((int)Square.E2);
+                    WKnights = 0UL.SetBit((int)Square.C3).SetBit((int)Square.E5);
+                    WQueen = 0UL.SetBit((int)Square.F3);
+                    break;
+                }
+                case InitialSetup.Position3:
+                {
+                    BPawns = 0UL.SetBit((int)Square.C7).SetBit((int)Square.D6).SetBit((int)Square.F4);
+                    BKnights = 0;
+                    BBishops = 0;
+                    BQueen = 0;
+                    BRooks = 0UL.SetBit((int)Square.H5);
+                    BKing = 0UL.SetBit((int)Square.H4);
+                    WPawns = 0UL.SetBit((int)Square.B5).SetBit((int)Square.E2).SetBit((int)Square.G2);
+                    WKnights = 0;
+                    WBishops = 0;
+                    WQueen = 0;
+                    WRooks = 0UL.SetBit((int)Square.B4);
+                    WKing = 0UL.SetBit((int)Square.A5);
+                    break;
+                }
+                default: break;
             }
         }
 
